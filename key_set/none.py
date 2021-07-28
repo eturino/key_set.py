@@ -12,3 +12,7 @@ class KeySetNone(KeySet):
     def elements(self) -> set[str]:
         """Returns an empty set."""
         return set()
+
+    def represents_none(self) -> bool:
+        """Returns true if the set is a NONE KeySet."""
+        return True
