@@ -12,3 +12,7 @@ class KeySetAll(KeySet):
     def elements(self) -> set[str]:
         """Returns an empty set."""
         return set()
+
+    def represents_all(self) -> bool:
+        """Returns true if the set is a ALL KeySet."""
+        return True
