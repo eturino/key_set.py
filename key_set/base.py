@@ -19,3 +19,19 @@ class KeySet(ABC):  # Inherit from ABC(Abstract base class)
         It'll return an empty set.
         """
         pass
+
+    def represents_all(self) -> bool:
+        """Returns true if the set is a ALL KeySet."""
+        return False
+
+    def represents_none(self) -> bool:
+        """Returns true if the set is a NONE KeySet."""
+        return False
+
+    def represents_some(self) -> bool:
+        """Returns true if the set is a SOME KeySet."""
+        return False
+
+    def represents_all_except_some(self) -> bool:
+        """Returns true if the set is a ALL_EXCEPT_SOME KeySet."""
+        return False

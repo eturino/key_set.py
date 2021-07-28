@@ -16,3 +16,7 @@ class KeySetSome(KeySet):
     def elements(self) -> set[str]:
         """Returns a copy of the set of the elements of the concrete set."""
         return set(self._elements)
+
+    def represents_some(self) -> bool:
+        """Returns true if the set is a SOME KeySet."""
+        return True
