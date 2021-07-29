@@ -120,6 +120,10 @@ class KeySetNone(KeySet):
 class KeySetSome(KeySet):
     """Represents the SOME sets: a concrete set (`A ⊂ 𝕌`)."""
 
+    def __init__(self, elements: set[str]):
+        """Requires the set of elements of the concrete set."""
+        self._elements = set(elements)
+
     def __eq__(self, other):
         """Returns True if `other` is KeySetSome."""
         if not isinstance(other, KeySet):
@@ -128,10 +132,6 @@ class KeySetSome(KeySet):
 
         return isinstance(other, KeySetSome) and \
             self._elements == other.elements()
-
-    def __init__(self, elements: set[str]):
-        """Requires the set of elements of the concrete set."""
-        self._elements = set(elements)
 
     def key_set_type(self) -> KeySetType:
         """Returns the KeySetType that describes the set."""
@@ -160,6 +160,10 @@ class KeySetAllExceptSome(KeySet):
     Includes all the elements except the given ones (`A' = {x ∈ 𝕌 | x ∉ A}`).
     """
 
+    def __init__(self, elements: set[str]):
+        """Requires the set of elements of the concrete set."""
+        self._elements = set(elements)
+
     def __eq__(self, other):
         """Returns True if `other` is KeySetAllExceptSome."""
         if not isinstance(other, KeySet):
@@ -168,10 +172,6 @@ class KeySetAllExceptSome(KeySet):
 
         return isinstance(other, KeySetAllExceptSome) and \
             self._elements == other.elements()
-
-    def __init__(self, elements: set[str]):
-        """Requires the set of elements of the concrete set."""
-        self._elements = set(elements)
 
     def key_set_type(self) -> KeySetType:
         """Returns the KeySetType that describes the set."""
