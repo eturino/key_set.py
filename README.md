@@ -43,3 +43,7 @@ Returns a new KeySet that represents the inverse Set of this one.
 
 - `ALL` <-> `NONE`
 - `SOME` <-> `ALL_EXCEPT_SOME`
+
+### `intersect(other)`
+
+Returns a new KeySet with the intersection (A ∩ B) of both Sets.
