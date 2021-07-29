@@ -37,7 +37,7 @@ returns the set with the elements. It will be blank for `All` and `None`.
 - `represents_some`: returns True if the KeySet is SOME
 - `represents_all_except_some`: returns True if the KeySet is ALL_EXCEPT_SOME
 
-### `inverse`
+### `invert`
 
 Returns a new KeySet that represents the inverse Set of this one.
 
