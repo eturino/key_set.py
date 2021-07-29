@@ -2,10 +2,7 @@
 import __future__  # noqa: F401
 
 import key_set  # noqa: F401
-from key_set.all import KeySetAll
-from key_set.all_except_some import KeySetAllExceptSome
-from key_set.none import KeySetNone
-from key_set.some import KeySetSome
+from key_set.base import KeySetAll, KeySetNone, KeySetSome, KeySetAllExceptSome
 
 
 class TestElements:  # noqa: D101
