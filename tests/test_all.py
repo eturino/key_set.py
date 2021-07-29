@@ -18,6 +18,13 @@ class TestAll:  # noqa: D101
         actual = ks.invert()
         assert actual.represents_none()
 
+    def test_clone(self) -> None:
+        ks = KeySetAll()
+        actual = ks.clone()
+        assert actual.represents_all()
+        assert actual == ks
+        assert actual is not ks
+
     def test_elements(self) -> None:
         ks = KeySetAll()
         assert ks.elements() == set()

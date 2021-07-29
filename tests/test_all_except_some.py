@@ -19,6 +19,14 @@ class TestAllExceptSome:  # noqa: D101
         assert actual.represents_some()
         assert actual.elements() == {'a', 'b'}
 
+    def test_clone(self) -> None:
+        ks = KeySetAllExceptSome({'a', 'b'})
+        actual = ks.clone()
+        assert actual.represents_all_except_some()
+        assert actual.elements() == {'a', 'b'}
+        assert actual == ks
+        assert actual is not ks
+
     def test_elements(self) -> None:
         ks = KeySetAllExceptSome({'a', 'b'})
         assert ks.elements() == {'a', 'b'}

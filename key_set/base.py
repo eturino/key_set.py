@@ -47,9 +47,22 @@ class KeySet(ABC):  # Inherit from ABC(Abstract base class)
         """
         pass
 
+    @abstractmethod
+    def clone(self) -> KeySet:
+        """Returns a new KeySet that represents the same Set of this one."""
+        pass
+
 
 class KeySetAll(KeySet):
     """Represents the ALL sets: 𝕌 (the entirety of possible keys)."""
+
+    def __eq__(self, other):
+        """Returns True if `other` is KeySetAll.."""
+        if not isinstance(other, KeySet):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+
+        return isinstance(other, KeySetAll)
 
     def key_set_type(self) -> KeySetType:
         """Returns the KeySetType that describes the set."""
@@ -67,9 +80,21 @@ class KeySetAll(KeySet):
         """Returns a new KeySet NONE."""
         return KeySetNone()
 
+    def clone(self) -> KeySetAll:
+        """Returns a new KeySet that represents the same Set of this one."""
+        return KeySetAll()
+
 
 class KeySetNone(KeySet):
     """Represents the NONE sets: ø (empty set)."""
+
+    def __eq__(self, other):
+        """Returns True if `other` is KeySetNone..."""
+        if not isinstance(other, KeySet):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+
+        return isinstance(other, KeySetNone)
 
     def key_set_type(self) -> KeySetType:
         """Returns the KeySetType that describes the set."""
@@ -87,9 +112,22 @@ class KeySetNone(KeySet):
         """Returns a new KeySet ALL."""
         return KeySetAll()
 
+    def clone(self) -> KeySetNone:
+        """Returns a new KeySet that represents the same Set of this one."""
+        return KeySetNone()
+
 
 class KeySetSome(KeySet):
     """Represents the SOME sets: a concrete set (`A ⊂ 𝕌`)."""
+
+    def __eq__(self, other):
+        """Returns True if `other` is KeySetSome."""
+        if not isinstance(other, KeySet):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+
+        return isinstance(other, KeySetSome) and \
+            self._elements == other.elements()
 
     def __init__(self, elements: set[str]):
         """Requires the set of elements of the concrete set."""
@@ -111,12 +149,25 @@ class KeySetSome(KeySet):
         """Returns a new KeySet ALL_EXCEPT_SOME."""
         return KeySetAllExceptSome(self.elements())
 
+    def clone(self) -> KeySetSome:
+        """Returns a new KeySet that represents the same Set of this one."""
+        return KeySetSome(self.elements())
+
 
 class KeySetAllExceptSome(KeySet):
     """Represents the ALL_EXCEPT_SOME sets: the complementary of a concrete set.
 
     Includes all the elements except the given ones (`A' = {x ∈ 𝕌 | x ∉ A}`).
     """
+
+    def __eq__(self, other):
+        """Returns True if `other` is KeySetAllExceptSome."""
+        if not isinstance(other, KeySet):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+
+        return isinstance(other, KeySetAllExceptSome) and \
+            self._elements == other.elements()
 
     def __init__(self, elements: set[str]):
         """Requires the set of elements of the concrete set."""
@@ -137,3 +188,7 @@ class KeySetAllExceptSome(KeySet):
     def invert(self) -> KeySetSome:
         """Returns a new KeySet SOME."""
         return KeySetSome(self.elements())
+
+    def clone(self) -> KeySetAllExceptSome:
+        """Returns a new KeySet that represents the same Set of this one."""
+        return KeySetAllExceptSome(self.elements())
