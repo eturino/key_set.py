@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from typing import Any, List, Set, TypeVar, Union
 
-# abc is a builtin module, we have to import ABC and abstractmethod
 from .enum import KeySetType
+
+TKS = TypeVar('TKS', List[str], Set[str])
 
 
 class KeySet(ABC):  # Inherit from ABC(Abstract base class)
@@ -56,7 +58,7 @@ class KeySet(ABC):  # Inherit from ABC(Abstract base class)
 class KeySetAll(KeySet):
     """Represents the ALL sets: 𝕌 (the entirety of possible keys)."""
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         """Returns True if `other` is KeySetAll.."""
         if not isinstance(other, KeySet):
             # don't attempt to compare against unrelated types
@@ -84,11 +86,15 @@ class KeySetAll(KeySet):
         """Returns a new KeySet that represents the same Set of this one."""
         return KeySetAll()
 
+    def intersect(self, other: KeySet) -> KeySet:
+        """Returns a new KeySet that represents the intersection (A ∩ B)."""
+        return other.clone()
+
 
 class KeySetNone(KeySet):
     """Represents the NONE sets: ø (empty set)."""
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         """Returns True if `other` is KeySetNone..."""
         if not isinstance(other, KeySet):
             # don't attempt to compare against unrelated types
@@ -116,22 +122,28 @@ class KeySetNone(KeySet):
         """Returns a new KeySet that represents the same Set of this one."""
         return KeySetNone()
 
+    def intersect(self, _other: KeySet) -> KeySetNone:
+        """Returns a new KeySet that represents the intersection (A ∩ B)."""
+        return self.clone()
+
 
 class KeySetSome(KeySet):
     """Represents the SOME sets: a concrete set (`A ⊂ 𝕌`)."""
 
-    def __init__(self, elements: set[str]):
+    def __init__(self, elements: TKS):
         """Requires the set of elements of the concrete set."""
         self._elements = set(elements)
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         """Returns True if `other` is KeySetSome."""
         if not isinstance(other, KeySet):
             # don't attempt to compare against unrelated types
             return NotImplemented
 
-        return isinstance(other, KeySetSome) and \
-            self._elements == other.elements()
+        if not isinstance(other, KeySetSome):
+            return False
+
+        return self._elements == other.elements()
 
     def key_set_type(self) -> KeySetType:
         """Returns the KeySetType that describes the set."""
@@ -153,6 +165,20 @@ class KeySetSome(KeySet):
         """Returns a new KeySet that represents the same Set of this one."""
         return KeySetSome(self.elements())
 
+    def intersect(self, other: KeySet) -> KeySet:
+        """Returns a new KeySet that represents the intersection (A ∩ B)."""
+        if other.represents_all():
+            return self.clone()
+        if other.represents_none():
+            return other.clone()
+        if other.represents_some():
+            els = self._elements.intersection(other.elements())
+            return build_some(els)
+        if other.represents_all_except_some():
+            els = self._elements.difference(other.elements())
+            return build_some(els)
+        return NotImplemented
+
 
 class KeySetAllExceptSome(KeySet):
     """Represents the ALL_EXCEPT_SOME sets: the complementary of a concrete set.
@@ -160,18 +186,20 @@ class KeySetAllExceptSome(KeySet):
     Includes all the elements except the given ones (`A' = {x ∈ 𝕌 | x ∉ A}`).
     """
 
-    def __init__(self, elements: set[str]):
+    def __init__(self, elements: TKS):
         """Requires the set of elements of the concrete set."""
         self._elements = set(elements)
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         """Returns True if `other` is KeySetAllExceptSome."""
         if not isinstance(other, KeySet):
             # don't attempt to compare against unrelated types
             return NotImplemented
 
-        return isinstance(other, KeySetAllExceptSome) and \
-            self._elements == other.elements()
+        if not isinstance(other, KeySetAllExceptSome):
+            return False
+
+        return self._elements == other.elements()
 
     def key_set_type(self) -> KeySetType:
         """Returns the KeySetType that describes the set."""
@@ -192,3 +220,37 @@ class KeySetAllExceptSome(KeySet):
     def clone(self) -> KeySetAllExceptSome:
         """Returns a new KeySet that represents the same Set of this one."""
         return KeySetAllExceptSome(self.elements())
+
+    def intersect(self, other: KeySet) -> KeySet:
+        """Returns a new KeySet that represents the intersection (A ∩ B)."""
+        if other.represents_all():
+            return self.clone()
+        if other.represents_none():
+            return other.clone()
+        if other.represents_some():
+            els = other.elements().difference(self._elements)
+            return build_some(els)
+        if other.represents_all_except_some():
+            els = self._elements.union(other.elements())
+            return build_all_except_some(els)
+        return NotImplemented
+
+
+TS = Union[KeySetSome, KeySetNone]
+TAES = Union[KeySetAllExceptSome, KeySetAll]
+
+
+def build_some(seq: TKS) -> TS:
+    """Returns NONE if seq is blank, or SOME otherwise."""
+    if len(seq) > 0:
+        return KeySetSome(seq)
+    else:
+        return KeySetNone()
+
+
+def build_all_except_some(seq: TKS) -> TAES:
+    """Returns ALL if seq is blank, or ALL_EXCEPT_SOME otherwise."""
+    if len(seq) > 0:
+        return KeySetAllExceptSome(seq)
+    else:
+        return KeySetAll()
