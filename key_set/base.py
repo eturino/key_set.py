@@ -39,7 +39,7 @@ class KeySet(ABC):  # Inherit from ABC(Abstract base class)
         return False
 
     @abstractmethod
-    def invert(self):
+    def invert(self) -> KeySet:
         """Returns a new KeySet that represents the inverse Set of this one.
 
         All <-> None
