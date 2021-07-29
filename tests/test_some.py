@@ -20,6 +20,14 @@ class TestSome:  # noqa: D101
         assert actual.represents_all_except_some()
         assert actual.elements() == {'a', 'b'}
 
+    def test_clone(self) -> None:
+        ks = KeySetSome({'a', 'b'})
+        actual = ks.clone()
+        assert actual.represents_some()
+        assert actual.elements() == {'a', 'b'}
+        assert actual == ks
+        assert actual is not ks
+
     def test_elements(self) -> None:
         ks = KeySetSome({'a', 'b'})
         assert ks.elements() == {'a', 'b'}
