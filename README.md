@@ -41,5 +41,5 @@ returns the set with the elements. It will be blank for `All` and `None`.
 
 Returns a new KeySet that represents the inverse Set of this one.
 
-`ALL` <-> `NONE`
-`SOME` <-> `ALL_EXCEPT_SOME`
+- `ALL` <-> `NONE`
+- `SOME` <-> `ALL_EXCEPT_SOME`
