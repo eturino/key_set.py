@@ -1,5 +1,6 @@
 from key_set.base import KeySet
 from key_set.enum import KeySetType
+from key_set.none import KeySetNone
 
 
 class KeySetAll(KeySet):
@@ -16,3 +17,7 @@ class KeySetAll(KeySet):
     def represents_all(self) -> bool:
         """Returns true if the set is a ALL KeySet."""
         return True
+
+    def invert(self) -> KeySetNone:
+        """Returns a new KeySet NONE."""
+        return KeySetNone()
