@@ -307,6 +307,16 @@ TS = Union[KeySetSome, KeySetNone]
 TAES = Union[KeySetAllExceptSome, KeySetAll]
 
 
+def build_all() -> KeySetAll:
+    """Returns ALL."""
+    return KeySetAll()
+
+
+def build_none() -> KeySetNone:
+    """Returns NONE."""
+    return KeySetNone()
+
+
 def build_some_or_none(seq: TKS) -> TS:
     """Returns NONE if seq is blank, or SOME otherwise."""
     if len(seq) > 0:
