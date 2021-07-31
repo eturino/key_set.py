@@ -60,3 +60,7 @@ class TestNone:  # noqa: D101
         assert actual.represents_none()
         assert actual == ks
         assert actual is not ks
+
+    def test_includes(self) -> None:
+        ks = KeySetNone()
+        assert not ks.includes('a')

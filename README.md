@@ -4,6 +4,11 @@ Python port of [KeySet in TypeScript](https://github.com/eturino/ts-key-set) and
 
 TBD
 
+## TODO
+
+- remove
+- union
+
 ## Limitations
 
 - for now, only KeySet of strings
@@ -22,22 +27,22 @@ Enum that represents the 4 types of KeySets:
 
 Methods exposed:
 
-### `key_set_type`
+### `key_set_type()`
 
 returns the `KeySetType` enum
 
-### `elements`
+### `elements()`
 
 returns the set with the elements. It will be blank for `All` and `None`.
 
-### `represents_xxx` methods
+### `represents_xxx()` methods
 
 - `represents_all`: returns True if the KeySet is ALL
 - `represents_none`: returns True if the KeySet is NONE
 - `represents_some`: returns True if the KeySet is SOME
 - `represents_all_except_some`: returns True if the KeySet is ALL_EXCEPT_SOME
 
-### `invert`
+### `invert()`
 
 Returns a new KeySet that represents the inverse Set of this one.
 
@@ -45,5 +50,9 @@ Returns a new KeySet that represents the inverse Set of this one.
 - `SOME` <-> `ALL_EXCEPT_SOME`
 
 ### `intersect(other)`
+
+Returns a new KeySet with the intersection (A ∩ B) of both Sets.
+
+### `includes(element)`
 
 Returns a new KeySet with the intersection (A ∩ B) of both Sets.
