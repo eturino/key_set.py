@@ -1,6 +1,7 @@
 # `key_set`
 
-Python port of [KeySet in TypeScript](https://github.com/eturino/ts-key-set) and [KeySet in Ruby](https://github.com/eturino/ruby_key_set)
+Python port of [KeySet in TypeScript](https://github.com/eturino/ts-key-set)
+and [KeySet in Ruby](https://github.com/eturino/ruby_key_set)
 
 TBD
 
@@ -20,7 +21,31 @@ Enum that represents the 4 types of KeySets:
 - `ALL` represents the entirety of possible keys (`𝕌`)
 - `NONE` represents an empty set (`∅`)
 - `SOME` represents a concrete set (`A ⊂ 𝕌`)
-- `ALL_EXCEPT_SOME` represents the complementary of a set, all the elements except the given ones (`A' = {x ∈ 𝕌 | x ∉ A}`) _(see [Complement in Wikipedia](https://en.wikipedia.org/wiki/Complement_set_theory))*
+- `ALL_EXCEPT_SOME` represents the complementary of a set, all the elements except the given
+  ones (`A' = {x ∈ 𝕌 | x ∉ A}`) _(see [Complement in Wikipedia](https://en.wikipedia.org/wiki/Complement_set_theory))*
+
+## Creation
+
+Build your KeySets using the build functions
+
+```python
+from key_set import build_all, build_none, build_some_or_none, build_all_except_some_or_all
+
+build_all()  # => returns a new instance of KeySetAll
+build_none()  # => returns a new instance of KeySetNone
+
+build_some_or_none([])  # returns a new instance of KeySetNone
+
+# returns a new instance of KeySetSome with keys {'a', 'b', 'c'} (in a unique set)
+build_some_or_none({'a', 'c', 'b'})
+build_some_or_none(['a', 'c', 'b', 'c'])
+
+build_all_except_some_or_all([])  # returns a new instance of KeySetAll
+
+# returns a new instance of KeySetAllExceptSome with keys {'a', 'b', 'c'} (in a unique set)
+build_all_except_some_or_all({'a', 'c', 'b'})
+build_all_except_some_or_all(['a', 'c', 'b', 'c'])
+```
 
 ## `KeySet` classes
 

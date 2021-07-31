@@ -1,14 +1,22 @@
-
 # -*- coding: utf-8 -*-
 import __future__  # noqa: F401
 
 from typing import List
 
 import key_set  # noqa: F401
-from key_set.base import build_all_except_some_or_all, build_some_or_none
+from key_set.base import (build_all, build_all_except_some_or_all, build_none,
+                          build_some_or_none)
 
 
 class TestBuilds:  # noqa: D101
+
+    def test_build_all(self) -> None:
+        actual = build_all()
+        assert actual.represents_all()
+
+    def test_build_none(self) -> None:
+        actual = build_none()
+        assert actual.represents_none()
 
     def test_build_some_with_blank(self) -> None:
         keys: List[str] = []
