@@ -62,3 +62,27 @@ class TestAll:  # noqa: D101
     def test_includes(self) -> None:
         ks = KeySetAll()
         assert ks.includes('a')
+
+    def test_union_all(self) -> None:
+        ks = KeySetAll()
+        other = KeySetAll()
+        actual = ks.union(other)
+        assert actual.represents_all()
+
+    def test_union_none(self) -> None:
+        ks = KeySetAll()
+        other = KeySetNone()
+        actual = ks.union(other)
+        assert actual.represents_all()
+
+    def test_union_some(self) -> None:
+        ks = KeySetAll()
+        other = KeySetSome({'a', 'b'})
+        actual = ks.union(other)
+        assert actual.represents_all()
+
+    def test_union_all_except_some(self) -> None:
+        ks = KeySetAll()
+        other = KeySetAllExceptSome({'a', 'b'})
+        actual = ks.union(other)
+        assert actual.represents_all()
