@@ -55,4 +55,4 @@ Returns a new KeySet with the intersection (A ∩ B) of both Sets.
 
 ### `includes(element)`
 
-Returns a new KeySet with the intersection (A ∩ B) of both Sets.
+Returns True if the set that this KeySet represents contains the given element.
