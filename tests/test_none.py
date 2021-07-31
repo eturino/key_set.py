@@ -64,3 +64,33 @@ class TestNone:  # noqa: D101
     def test_includes(self) -> None:
         ks = KeySetNone()
         assert not ks.includes('a')
+
+    def test_union_all(self) -> None:
+        ks = KeySetNone()
+        other = KeySetAll()
+        actual = ks.union(other)
+        assert actual.represents_all()
+
+    def test_union_none(self) -> None:
+        ks = KeySetNone()
+        other = KeySetNone()
+        actual = ks.union(other)
+        assert actual.represents_none()
+
+    def test_union_some(self) -> None:
+        ks = KeySetNone()
+        other = KeySetSome({'a', 'b'})
+        actual = ks.union(other)
+        assert actual.represents_some()
+        assert actual.elements() == {'a', 'b'}
+        assert actual == other
+        assert actual is not other
+
+    def test_union_all_except_some(self) -> None:
+        ks = KeySetNone()
+        other = KeySetAllExceptSome({'a', 'b'})
+        actual = ks.union(other)
+        assert actual.represents_all_except_some()
+        assert actual.elements() == {'a', 'b'}
+        assert actual == other
+        assert actual is not other

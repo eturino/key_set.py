@@ -7,7 +7,6 @@ TBD
 ## TODO
 
 - remove
-- union
 
 ## Limitations
 
@@ -51,7 +50,11 @@ Returns a new KeySet that represents the inverse Set of this one.
 
 ### `intersect(other)`
 
-Returns a new KeySet with the intersection (A ∩ B) of both Sets.
+Returns a new KeySet with the intersection (A ∩ B) of both Sets: a set that contains the elements included in both sets.
+
+### `union(other)`
+
+Returns a new KeySet with the union (A ∩ B) of both Sets: a set that contains the elements in any of the sets.
 
 ### `includes(element)`
 
