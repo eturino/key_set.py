@@ -114,3 +114,11 @@ class TestSome:  # noqa: D101
         actual = ks.intersect(other)
         assert actual.represents_some()
         assert actual.elements() == {'a', 'b'}
+
+    def test_includes_included(self) -> None:
+        ks = KeySetSome({'a', 'b'})
+        assert ks.includes('a')
+
+    def test_includes_missing(self) -> None:
+        ks = KeySetSome({'a', 'b'})
+        assert not ks.includes('c')
