@@ -50,6 +50,11 @@ class KeySet(ABC):  # Inherit from ABC(Abstract base class)
         pass
 
     @abstractmethod
+    def includes(self, _elem: str) -> bool:
+        """Returns True if the set represented by this includes the elem."""
+        pass
+
+    @abstractmethod
     def clone(self) -> KeySet:
         """Returns a new KeySet that represents the same Set of this one."""
         pass
@@ -86,6 +91,10 @@ class KeySetAll(KeySet):
         """Returns a new KeySet that represents the same Set of this one."""
         return KeySetAll()
 
+    def includes(self, _elem: str) -> bool:
+        """Returns True if the set represented by this includes the elem."""
+        return True
+
     def intersect(self, other: KeySet) -> KeySet:
         """Returns a new KeySet that represents the intersection (A ∩ B)."""
         return other.clone()
@@ -121,6 +130,10 @@ class KeySetNone(KeySet):
     def clone(self) -> KeySetNone:
         """Returns a new KeySet that represents the same Set of this one."""
         return KeySetNone()
+
+    def includes(self, _elem: str) -> bool:
+        """Returns True if the set represented by this includes the elem."""
+        return False
 
     def intersect(self, _other: KeySet) -> KeySetNone:
         """Returns a new KeySet that represents the intersection (A ∩ B)."""
@@ -165,6 +178,10 @@ class KeySetSome(KeySet):
         """Returns a new KeySet that represents the same Set of this one."""
         return KeySetSome(self.elements())
 
+    def includes(self, elem: str) -> bool:
+        """Returns True if the set represented by this includes the elem."""
+        return elem in self._elements
+
     def intersect(self, other: KeySet) -> KeySet:
         """Returns a new KeySet that represents the intersection (A ∩ B)."""
         if other.represents_all():
@@ -172,11 +189,11 @@ class KeySetSome(KeySet):
         if other.represents_none():
             return other.clone()
         if other.represents_some():
-            els = self._elements.intersection(other.elements())
-            return build_some(els)
+            elems = self._elements.intersection(other.elements())
+            return build_some_or_none(elems)
         if other.represents_all_except_some():
-            els = self._elements.difference(other.elements())
-            return build_some(els)
+            elems = self._elements.difference(other.elements())
+            return build_some_or_none(elems)
         return NotImplemented
 
 
@@ -221,6 +238,10 @@ class KeySetAllExceptSome(KeySet):
         """Returns a new KeySet that represents the same Set of this one."""
         return KeySetAllExceptSome(self.elements())
 
+    def includes(self, elem: str) -> bool:
+        """Returns True if the set represented by this includes the elem."""
+        return elem not in self._elements
+
     def intersect(self, other: KeySet) -> KeySet:
         """Returns a new KeySet that represents the intersection (A ∩ B)."""
         if other.represents_all():
@@ -228,11 +249,11 @@ class KeySetAllExceptSome(KeySet):
         if other.represents_none():
             return other.clone()
         if other.represents_some():
-            els = other.elements().difference(self._elements)
-            return build_some(els)
+            elems = other.elements().difference(self._elements)
+            return build_some_or_none(elems)
         if other.represents_all_except_some():
-            els = self._elements.union(other.elements())
-            return build_all_except_some(els)
+            elems = self._elements.union(other.elements())
+            return build_all_except_some_or_all(elems)
         return NotImplemented
 
 
@@ -240,7 +261,7 @@ TS = Union[KeySetSome, KeySetNone]
 TAES = Union[KeySetAllExceptSome, KeySetAll]
 
 
-def build_some(seq: TKS) -> TS:
+def build_some_or_none(seq: TKS) -> TS:
     """Returns NONE if seq is blank, or SOME otherwise."""
     if len(seq) > 0:
         return KeySetSome(seq)
@@ -248,7 +269,7 @@ def build_some(seq: TKS) -> TS:
         return KeySetNone()
 
 
-def build_all_except_some(seq: TKS) -> TAES:
+def build_all_except_some_or_all(seq: TKS) -> TAES:
     """Returns ALL if seq is blank, or ALL_EXCEPT_SOME otherwise."""
     if len(seq) > 0:
         return KeySetAllExceptSome(seq)

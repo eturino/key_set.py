@@ -114,3 +114,11 @@ class TestAllExceptSome:  # noqa: D101
         actual = ks.intersect(other)
         assert actual.represents_all_except_some()
         assert actual.elements() == {'a', 'b', 'c', 'd'}
+
+    def test_includes_included(self) -> None:
+        ks = KeySetAllExceptSome({'a', 'b'})
+        assert not ks.includes('a')
+
+    def test_includes_missing(self) -> None:
+        ks = KeySetAllExceptSome({'a', 'b'})
+        assert ks.includes('c')

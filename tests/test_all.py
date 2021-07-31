@@ -58,3 +58,7 @@ class TestAll:  # noqa: D101
         assert actual.elements() == {'a', 'b'}
         assert actual == other
         assert actual is not other
+
+    def test_includes(self) -> None:
+        ks = KeySetAll()
+        assert ks.includes('a')
