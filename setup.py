@@ -14,7 +14,7 @@ with open(path.join(path.abspath(path.dirname(__file__)), 'README.md'),
 setup(
     # Basic project information
     name='key_set',
-    version='0.0.5',
+    version='1.0.0',
     # Authorship and online reference
     author='Eduardo Turiño',
     author_email='eturino@eturino.com',
