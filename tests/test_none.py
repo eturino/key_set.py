@@ -25,9 +25,20 @@ class TestNone:  # noqa: D101
         assert actual == ks
         assert actual is not ks
 
+    def test_repr(self) -> None:
+        ks = KeySetNone()
+        actual = eval(repr(ks))
+        assert actual.represents_none()
+        assert actual == ks
+        assert actual is not ks
+
     def test_elements(self) -> None:
         ks = KeySetNone()
         assert ks.elements() == set()
+
+    def test_len(self) -> None:
+        ks = KeySetNone()
+        assert len(ks) == 0
 
     def test_intersect_all(self) -> None:
         ks = KeySetNone()
@@ -64,6 +75,7 @@ class TestNone:  # noqa: D101
     def test_includes(self) -> None:
         ks = KeySetNone()
         assert not ks.includes('a')
+        assert 'a' not in ks
 
     def test_union_all(self) -> None:
         ks = KeySetNone()

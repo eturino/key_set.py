@@ -40,6 +40,15 @@ class KeySet(ABC):  # Inherit from ABC(Abstract base class)
         """Returns true if the set is a ALL_EXCEPT_SOME KeySet."""
         return False
 
+    def __contains__(self, item: str) -> bool:
+        """Returns True if the set represented by this includes the elem."""
+        return self.includes(item)
+
+    @abstractmethod
+    def includes(self, _elem: str) -> bool:
+        """Returns True if the set represented by this includes the elem."""
+        pass
+
     @abstractmethod
     def invert(self) -> KeySet:
         """Returns a new KeySet that represents the inverse Set of this one.
@@ -47,11 +56,6 @@ class KeySet(ABC):  # Inherit from ABC(Abstract base class)
         All <-> None
         Some <-> AllExceptSome
         """
-        pass
-
-    @abstractmethod
-    def includes(self, _elem: str) -> bool:
-        """Returns True if the set represented by this includes the elem."""
         pass
 
     @abstractmethod
@@ -85,6 +89,18 @@ class KeySetAll(KeySet):
             return NotImplemented
 
         return isinstance(other, KeySetAll)
+
+    def __len__(self) -> int:
+        """Returns 0 (since we do not know, but maybe should be infinity)."""
+        return 0
+
+    def __str__(self) -> str:
+        """Returns str()."""
+        return '<KeySetAll>'
+
+    def __repr__(self) -> str:
+        """Returns repr()."""
+        return 'KeySetAll()'
 
     def key_set_type(self) -> KeySetType:
         """Returns the KeySetType that describes the set."""
@@ -142,6 +158,18 @@ class KeySetNone(KeySet):
 
         return isinstance(other, KeySetNone)
 
+    def __len__(self) -> int:
+        """Returns 0."""
+        return 0
+
+    def __str__(self) -> str:
+        """Returns str()."""
+        return '<KeySetNone>'
+
+    def __repr__(self) -> str:
+        """Returns repr()."""
+        return 'KeySetNone()'
+
     def key_set_type(self) -> KeySetType:
         """Returns the KeySetType that describes the set."""
         return KeySetType.NONE
@@ -196,6 +224,20 @@ class KeySetSome(KeySet):
             return False
 
         return self._elements == other.elements()
+
+    def __len__(self) -> int:
+        """Returns the length of the elements in the set."""
+        return len(self._elements)
+
+    def __str__(self) -> str:
+        """Returns str()."""
+        keys = ','.join(sorted([x for x in self._elements]))
+        return f'<KeySetSome ({keys})>'
+
+    def __repr__(self) -> str:
+        """Returns repr()."""
+        keys = ','.join([f'\'{x}\'' for x in self._elements])
+        return f'KeySetSome([{keys}])'
 
     def key_set_type(self) -> KeySetType:
         """Returns the KeySetType that describes the set."""
@@ -284,6 +326,20 @@ class KeySetAllExceptSome(KeySet):
             return False
 
         return self._elements == other.elements()
+
+    def __len__(self) -> int:
+        """Returns the length of the elements in the exclusion."""
+        return len(self._elements)
+
+    def __str__(self) -> str:
+        """Returns str()."""
+        keys = ','.join(sorted([x for x in self._elements]))
+        return f'<KeySetAllExceptSome ({keys})>'
+
+    def __repr__(self) -> str:
+        """Returns repr()."""
+        keys = ','.join([f'\'{x}\'' for x in self._elements])
+        return f'KeySetAllExceptSome([{keys}])'
 
     def key_set_type(self) -> KeySetType:
         """Returns the KeySetType that describes the set."""

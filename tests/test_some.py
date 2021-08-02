@@ -28,9 +28,21 @@ class TestSome:  # noqa: D101
         assert actual == ks
         assert actual is not ks
 
+    def test_repr(self) -> None:
+        ks = KeySetSome({'a', 'b'})
+        actual = eval(repr(ks))
+        assert actual.represents_some()
+        assert actual.elements() == {'a', 'b'}
+        assert actual == ks
+        assert actual is not ks
+
     def test_elements(self) -> None:
         ks = KeySetSome({'a', 'b'})
         assert ks.elements() == {'a', 'b'}
+
+    def test_len(self) -> None:
+        ks = KeySetSome({'a', 'b'})
+        assert len(ks) == 2
 
     def test_intersect_all(self) -> None:
         ks = KeySetSome({'a', 'b'})
@@ -118,10 +130,12 @@ class TestSome:  # noqa: D101
     def test_includes_included(self) -> None:
         ks = KeySetSome({'a', 'b'})
         assert ks.includes('a')
+        assert 'a' in ks
 
     def test_includes_missing(self) -> None:
         ks = KeySetSome({'a', 'b'})
         assert not ks.includes('c')
+        assert 'c' not in ks
 
     def test_union_all(self) -> None:
         ks = KeySetSome({'a', 'b'})
