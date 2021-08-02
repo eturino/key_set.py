@@ -80,11 +80,13 @@ build: test mypy isort lint
 	@echo Run setup.py-based build process to package application
 	pipenv run python setup.py bdist_wheel
 
+bump:
+	@echo Bump version and change CHANGELOG
+	npx standard-version
+
 publish: all
-	@echo Release to pypi.org and create git tag
+	@echo Release to pypi.org
 	pipenv run twine upload dist/*
-	git tag -a $(VERSION) -m "Version $(VERSION)"
-	git push --tags
 
 run:
 	@echo Execute key_set directly
