@@ -27,6 +27,18 @@ class TestAllExceptSome:  # noqa: D101
         assert actual == ks
         assert actual is not ks
 
+    def test_repr(self) -> None:
+        ks = KeySetAllExceptSome({'a', 'b'})
+        actual = eval(repr(ks))
+        assert actual.represents_all_except_some()
+        assert actual.elements() == {'a', 'b'}
+        assert actual == ks
+        assert actual is not ks
+
+    def test_len(self) -> None:
+        ks = KeySetAllExceptSome({'a', 'b'})
+        assert len(ks) == 2
+
     def test_elements(self) -> None:
         ks = KeySetAllExceptSome({'a', 'b'})
         assert ks.elements() == {'a', 'b'}
@@ -118,10 +130,12 @@ class TestAllExceptSome:  # noqa: D101
     def test_includes_included(self) -> None:
         ks = KeySetAllExceptSome({'a', 'b'})
         assert not ks.includes('a')
+        assert 'a' not in ks
 
     def test_includes_missing(self) -> None:
         ks = KeySetAllExceptSome({'a', 'b'})
         assert ks.includes('c')
+        assert 'c' in ks
 
     def test_union_all(self) -> None:
         ks = KeySetAllExceptSome({'a', 'b'})

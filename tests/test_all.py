@@ -25,6 +25,13 @@ class TestAll:  # noqa: D101
         assert actual == ks
         assert actual is not ks
 
+    def test_repr(self) -> None:
+        ks = KeySetAll()
+        actual = eval(repr(ks))
+        assert actual.represents_all()
+        assert actual == ks
+        assert actual is not ks
+
     def test_elements(self) -> None:
         ks = KeySetAll()
         assert ks.elements() == set()
@@ -62,6 +69,11 @@ class TestAll:  # noqa: D101
     def test_includes(self) -> None:
         ks = KeySetAll()
         assert ks.includes('a')
+        assert 'a' in ks
+
+    def test_len(self) -> None:
+        ks = KeySetAll()
+        assert len(ks) == 0
 
     def test_union_all(self) -> None:
         ks = KeySetAll()
