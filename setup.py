@@ -13,17 +13,17 @@ with open(path.join(path.abspath(path.dirname(__file__)), 'README.md'),
 
 setup(
     # Basic project information
-    name='python3-boilerplate',
+    name='key_set',
     version='0.0.5',
     # Authorship and online reference
-    author='Basti Tee',
-    author_email='basti.tee@posteo.de',
-    url='https://github.com/BastiTee/python3-boilerplate',
+    author='Eduardo Turiño',
+    author_email='eturino@eturino.com',
+    url='https://github.com/eturino/key_set.py',
     # Detailed description
-    description='A best-practices template project for Python3 modules.',
+    description='KeySet with 4 classes to represent concepts of All, None, Some, and AllExceptSome',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    keywords='sample setuptools development',
+    keywords='set key_set',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
@@ -32,7 +32,8 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8'
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9'
     ],
     # Package configuration
     packages=find_packages(exclude=('tests',)),
