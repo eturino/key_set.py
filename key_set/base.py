@@ -69,6 +69,11 @@ class KeySet(ABC):  # Inherit from ABC(Abstract base class)
         """Returns a new KeySet that contains the elements of both (A U B)."""
         pass
 
+    @abstractmethod
+    def difference(self, other: KeySet) -> KeySet:
+        """Returns a new KeySet that contains the diff (A - B)."""
+        pass
+
 
 class KeySetAll(KeySet):
     """Represents the ALL sets: 𝕌 (the entirety of possible keys)."""
@@ -113,6 +118,18 @@ class KeySetAll(KeySet):
         """Returns a new KeySet that contains the elements of both (A U B)."""
         return self.clone()
 
+    def difference(self, other: KeySet) -> KeySet:
+        """Returns a new KeySet that contains the diff (A - B)."""
+        if other.represents_all():
+            return KeySetNone()
+        if other.represents_none():
+            return self.clone()
+        if other.represents_some():
+            return KeySetAllExceptSome(other.elements())
+        if other.represents_all_except_some():
+            return KeySetSome(other.elements())
+        return NotImplemented
+
 
 class KeySetNone(KeySet):
     """Represents the NONE sets: ø (empty set)."""
@@ -156,6 +173,10 @@ class KeySetNone(KeySet):
     def union(self, other: KeySet) -> KeySet:
         """Returns a new KeySet that contains the elements of both (A U B)."""
         return other.clone()
+
+    def difference(self, _other: KeySet) -> KeySet:
+        """Returns a new KeySet that contains the diff (A - B)."""
+        return self.clone()
 
 
 class KeySetSome(KeySet):
@@ -226,6 +247,20 @@ class KeySetSome(KeySet):
         if other.represents_all_except_some():
             elems = other.elements().difference(self._elements)
             return build_all_except_some_or_all(elems)
+        return NotImplemented
+
+    def difference(self, other: KeySet) -> KeySet:
+        """Returns a new KeySet that contains the diff (A - B)."""
+        if other.represents_all():
+            return KeySetNone()
+        if other.represents_none():
+            return self.clone()
+        if other.represents_some():
+            elems = self._elements.difference(other.elements())
+            return build_some_or_none(elems)
+        if other.represents_all_except_some():
+            elems = self._elements.intersection(other.elements())
+            return build_some_or_none(elems)
         return NotImplemented
 
 
@@ -300,6 +335,21 @@ class KeySetAllExceptSome(KeySet):
         if other.represents_all_except_some():
             elems = other.elements().intersection(self._elements)
             return build_all_except_some_or_all(elems)
+        return NotImplemented
+
+    def difference(self, other: KeySet) -> KeySet:
+        """Returns a new KeySet that contains the diff (A - B)."""
+        if other.represents_all():
+            return KeySetNone()
+        if other.represents_none():
+            return self.clone()
+        if other.represents_some():
+            elems = self._elements.union(other.elements())
+            return build_all_except_some_or_all(elems)
+        if other.represents_all_except_some():
+            other_elems = other.elements()
+            surviving = [e for e in other_elems if e not in self._elements]
+            return build_some_or_none(surviving)
         return NotImplemented
 
 

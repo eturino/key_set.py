@@ -86,3 +86,29 @@ class TestAll:  # noqa: D101
         other = KeySetAllExceptSome({'a', 'b'})
         actual = ks.union(other)
         assert actual.represents_all()
+
+    def test_remove_all(self) -> None:
+        ks = KeySetAll()
+        other = KeySetAll()
+        actual = ks.difference(other)
+        assert actual.represents_none()
+
+    def test_remove_none(self) -> None:
+        ks = KeySetAll()
+        other = KeySetNone()
+        actual = ks.difference(other)
+        assert actual.represents_all()
+
+    def test_remove_some(self) -> None:
+        ks = KeySetAll()
+        other = KeySetSome({'a', 'b'})
+        actual = ks.difference(other)
+        assert actual.represents_all_except_some()
+        assert actual.elements() == {'a', 'b'}
+
+    def test_remove_all_except_some(self) -> None:
+        ks = KeySetAll()
+        other = KeySetAllExceptSome({'a', 'b'})
+        actual = ks.difference(other)
+        assert actual.represents_some()
+        assert actual.elements() == {'a', 'b'}
