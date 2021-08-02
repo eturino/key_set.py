@@ -94,3 +94,27 @@ class TestNone:  # noqa: D101
         assert actual.elements() == {'a', 'b'}
         assert actual == other
         assert actual is not other
+
+    def test_remove_all(self) -> None:
+        ks = KeySetNone()
+        other = KeySetAll()
+        actual = ks.difference(other)
+        assert actual.represents_none()
+
+    def test_remove_none(self) -> None:
+        ks = KeySetNone()
+        other = KeySetNone()
+        actual = ks.difference(other)
+        assert actual.represents_none()
+
+    def test_remove_some(self) -> None:
+        ks = KeySetNone()
+        other = KeySetSome({'a', 'b'})
+        actual = ks.difference(other)
+        assert actual.represents_none()
+
+    def test_remove_all_except_some(self) -> None:
+        ks = KeySetNone()
+        other = KeySetAllExceptSome({'a', 'b'})
+        actual = ks.difference(other)
+        assert actual.represents_none()

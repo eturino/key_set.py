@@ -5,10 +5,6 @@ and [KeySet in Ruby](https://github.com/eturino/ruby_key_set)
 
 TBD
 
-## TODO
-
-- remove
-
 ## Limitations
 
 - for now, only KeySet of strings
@@ -80,6 +76,10 @@ Returns a new KeySet with the intersection (A ∩ B) of both Sets: a set that co
 ### `union(other)`
 
 Returns a new KeySet with the union (A ∩ B) of both Sets: a set that contains the elements in any of the sets.
+
+### `difference(other)`
+
+Returns a new KeySet with the difference (A - B) of the Sets: a set that contains the elements of A that are not in B.
 
 ### `includes(element)`
 
