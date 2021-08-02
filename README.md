@@ -3,12 +3,13 @@
 Python port of [KeySet in TypeScript](https://github.com/eturino/ts-key-set)
 and [KeySet in Ruby](https://github.com/eturino/ruby_key_set)
 
-TBD
+KeySet with 4 classes to represent concepts of All, None, Some, and AllExceptSome, the last 2 with a set of keys, and all with [intersection](#intersectother), [difference](#differenceother), [union](#unionother), [inversion](#invert), and [inclusion](#includeselement) calculations.
+
 
 ## Limitations
 
 - for now, only KeySet of strings
-- no ComposedKeySet yet
+- no ComposedKeySet yet (see [KeySet in TypeScript](https://github.com/eturino/ts-key-set#composedkeyset))
 
 ## `KeySetType` enum
 
