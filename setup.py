@@ -12,6 +12,7 @@ with open(path.join(path.abspath(path.dirname(__file__)), 'README.md'),
     long_description = f.read()
 
 setup(
+    zip_safe=False,
     # Basic project information
     name='key_set',
     version='1.1.0',
@@ -38,6 +39,7 @@ setup(
     # Package configuration
     packages=find_packages(exclude=('tests',)),
     include_package_data=True,
+    package_data={"key_set": ["py.typed"]},
     python_requires='>= 3.6',
     install_requires=[],
     # Licensing and copyright
