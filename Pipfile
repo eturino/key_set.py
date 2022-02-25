@@ -20,7 +20,4 @@ rope = "*" # Refactoring library
 twine = "*" # Interoperability with pypi.org
 mypy = "*" # Optional static type checker
 typing_extensions = "*" # Typing extensions for mypy
-my_module = {path = ".", editable = true}
-
-[packages]
-requests = "*"
+key_set = {path = ".", editable = true}

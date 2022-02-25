@@ -19,7 +19,7 @@ export LANG = C.UTF-8
 export PYPE_CONFIG_FOLDER = $(shell pwd)/.venv/.pype-cli
 # Process variables
 VERSION = $(shell python3 setup.py --version)
-PY_FILES := setup.py my_module tests
+PY_FILES := setup.py key_set tests
 
 all: clean venv build
 
@@ -69,12 +69,12 @@ isort-apply:
 
 mypy:
 	@echo Run static code checks against source code base
-	pipenv run mypy my_module
+	pipenv run mypy key_set
 	pipenv run mypy tests
 
 lint:
 	@echo Run code formatting checks against source code base
-	pipenv run flake8 my_module tests
+	pipenv run flake8 key_set tests
 
 build: test mypy isort lint
 	@echo Run setup.py-based build process to package application
@@ -87,8 +87,8 @@ publish: all
 	git push --tags
 
 run:
-	@echo Execute my_module directly
-	pipenv run python -m my_module
+	@echo Execute key_set directly
+	pipenv run python -m key_set
 
 fetch-latest-boilerplate:
 	@echo Fetch latest python3-boilerplate version from github

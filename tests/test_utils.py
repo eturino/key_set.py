@@ -12,10 +12,9 @@ from os import path  # noqa: F401
 from re import IGNORECASE, sub  # noqa: F401
 
 import pytest
-import requests  # noqa: F401
 
-import my_module  # noqa: F401
-from my_module.utils import add_two_numbers
+import key_set  # noqa: F401
+from key_set.utils import add_two_numbers
 
 
 class TestUtils:  # noqa: D101
