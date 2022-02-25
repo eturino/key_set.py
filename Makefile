@@ -94,3 +94,12 @@ publish:
 	git push --tags
 # Uncomment the following line to integrate with pypi publishing
 # $(POETRY_CMD) publish
+
+fetch-latest-boilerplate:
+	@echo Fetch latest python3-boilerplate version from github
+	git remote add py3template git@github.com:BastiTee/python3-boilerplate.git \
+	||true
+	git pull py3template master --allow-unrelated-histories ||true
+	@echo ----------------------------------------------------
+	@echo Resolve all merge conflicts and commit your changes!
+	@echo ----------------------------------------------------

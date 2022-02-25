@@ -107,6 +107,7 @@ venv.bak/
 # IntelliJ / PyCharm
 .idea/
 
+# VSCode Local History
+.history/
 # Other
 .DS_Store
-

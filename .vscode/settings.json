@@ -1,6 +1,6 @@
 {
     "python.analysis.extraPaths": [
-        "my_module",
+        "key_set",
         "tests",
         ".venv/bin/python"
     ],
