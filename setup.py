@@ -15,7 +15,7 @@ setup(
     zip_safe=False,
     # Basic project information
     name='key_set',
-    version='1.1.0',
+    version='1.1.1',
     # Authorship and online reference
     author='Eduardo Turiño',
     author_email='eturino@eturino.com',
