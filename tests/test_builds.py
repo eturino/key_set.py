@@ -3,13 +3,15 @@ import __future__  # noqa: F401
 
 from typing import List
 
-import key_set  # noqa: F401
-from key_set.base import (build_all, build_all_except_some_or_all, build_none,
-                          build_some_or_none)
+from key_set import (
+    build_all,
+    build_all_except_some_or_all,
+    build_none,
+    build_some_or_none,
+)
 
 
 class TestBuilds:  # noqa: D101
-
     def test_build_all(self) -> None:
         actual = build_all()
         assert actual.represents_all()
@@ -24,9 +26,9 @@ class TestBuilds:  # noqa: D101
         assert actual.represents_none()
 
     def test_build_some_with_elements(self) -> None:
-        actual = build_some_or_none(['A'])
+        actual = build_some_or_none(["A"])
         assert actual.represents_some()
-        assert actual.elements() == {'A'}
+        assert actual.elements() == {"A"}
 
     def test_build_all_except_some_with_blank(self) -> None:
         keys: List[str] = []
@@ -34,6 +36,6 @@ class TestBuilds:  # noqa: D101
         assert actual.represents_all()
 
     def test_build_all_except_some_with_elements(self) -> None:
-        actual = build_all_except_some_or_all(['A'])
+        actual = build_all_except_some_or_all(["A"])
         assert actual.represents_all_except_some()
-        assert actual.elements() == {'A'}
+        assert actual.elements() == {"A"}

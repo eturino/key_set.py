@@ -5,7 +5,6 @@ from key_set.base import KeySetAll, KeySetAllExceptSome, KeySetNone, KeySetSome
 
 
 class TestNone:  # noqa: D101
-
     def test_represents(self) -> None:
         ks = KeySetNone()
         assert ks.represents_none()
@@ -58,7 +57,7 @@ class TestNone:  # noqa: D101
 
     def test_intersect_some(self) -> None:
         ks = KeySetNone()
-        other = KeySetSome({'a', 'b'})
+        other = KeySetSome({"a", "b"})
         actual = ks.intersect(other)
         assert actual.represents_none()
         assert actual == ks
@@ -66,7 +65,7 @@ class TestNone:  # noqa: D101
 
     def test_intersect_all_except_some(self) -> None:
         ks = KeySetNone()
-        other = KeySetAllExceptSome({'a', 'b'})
+        other = KeySetAllExceptSome({"a", "b"})
         actual = ks.intersect(other)
         assert actual.represents_none()
         assert actual == ks
@@ -74,8 +73,8 @@ class TestNone:  # noqa: D101
 
     def test_includes(self) -> None:
         ks = KeySetNone()
-        assert not ks.includes('a')
-        assert 'a' not in ks
+        assert not ks.includes("a")
+        assert "a" not in ks
 
     def test_union_all(self) -> None:
         ks = KeySetNone()
@@ -91,19 +90,19 @@ class TestNone:  # noqa: D101
 
     def test_union_some(self) -> None:
         ks = KeySetNone()
-        other = KeySetSome({'a', 'b'})
+        other = KeySetSome({"a", "b"})
         actual = ks.union(other)
         assert actual.represents_some()
-        assert actual.elements() == {'a', 'b'}
+        assert actual.elements() == {"a", "b"}
         assert actual == other
         assert actual is not other
 
     def test_union_all_except_some(self) -> None:
         ks = KeySetNone()
-        other = KeySetAllExceptSome({'a', 'b'})
+        other = KeySetAllExceptSome({"a", "b"})
         actual = ks.union(other)
         assert actual.represents_all_except_some()
-        assert actual.elements() == {'a', 'b'}
+        assert actual.elements() == {"a", "b"}
         assert actual == other
         assert actual is not other
 
@@ -121,12 +120,12 @@ class TestNone:  # noqa: D101
 
     def test_remove_some(self) -> None:
         ks = KeySetNone()
-        other = KeySetSome({'a', 'b'})
+        other = KeySetSome({"a", "b"})
         actual = ks.difference(other)
         assert actual.represents_none()
 
     def test_remove_all_except_some(self) -> None:
         ks = KeySetNone()
-        other = KeySetAllExceptSome({'a', 'b'})
+        other = KeySetAllExceptSome({"a", "b"})
         actual = ks.difference(other)
         assert actual.represents_none()

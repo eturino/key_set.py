@@ -27,7 +27,7 @@ export PYPE_CONFIG_FOLDER=$(shell pwd)/.venv/.pype-cli
 export DISABLE_LOG_LEVEL=INFO
 
 # Process variables
-PY_FILES := setup.py key_set tests
+PY_FILES := key_set tests
 
 all: clean venv build
 
