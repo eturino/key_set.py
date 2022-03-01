@@ -5,7 +5,7 @@ from typing import Any, List, Set, TypeVar, Union
 
 from .enum import KeySetType
 
-TKS = TypeVar('TKS', List[str], Set[str])
+TKS = TypeVar("TKS", List[str], Set[str])
 
 
 class KeySet(ABC):  # Inherit from ABC(Abstract base class)
@@ -96,11 +96,11 @@ class KeySetAll(KeySet):
 
     def __str__(self) -> str:
         """Returns str()."""
-        return '<KeySetAll>'
+        return "<KeySetAll>"
 
     def __repr__(self) -> str:
         """Returns repr()."""
-        return 'KeySetAll()'
+        return "KeySetAll()"
 
     def key_set_type(self) -> KeySetType:
         """Returns the KeySetType that describes the set."""
@@ -164,11 +164,11 @@ class KeySetNone(KeySet):
 
     def __str__(self) -> str:
         """Returns str()."""
-        return '<KeySetNone>'
+        return "<KeySetNone>"
 
     def __repr__(self) -> str:
         """Returns repr()."""
-        return 'KeySetNone()'
+        return "KeySetNone()"
 
     def key_set_type(self) -> KeySetType:
         """Returns the KeySetType that describes the set."""
@@ -231,13 +231,13 @@ class KeySetSome(KeySet):
 
     def __str__(self) -> str:
         """Returns str()."""
-        keys = ','.join(sorted([x for x in self._elements]))
-        return f'<KeySetSome ({keys})>'
+        keys = ",".join(sorted([x for x in self._elements]))
+        return f"<KeySetSome ({keys})>"
 
     def __repr__(self) -> str:
         """Returns repr()."""
-        keys = ','.join([f'\'{x}\'' for x in self._elements])
-        return f'KeySetSome([{keys}])'
+        keys = ",".join([f"'{x}'" for x in self._elements])
+        return f"KeySetSome([{keys}])"
 
     def key_set_type(self) -> KeySetType:
         """Returns the KeySetType that describes the set."""
@@ -333,13 +333,13 @@ class KeySetAllExceptSome(KeySet):
 
     def __str__(self) -> str:
         """Returns str()."""
-        keys = ','.join(sorted([x for x in self._elements]))
-        return f'<KeySetAllExceptSome ({keys})>'
+        keys = ",".join(sorted([x for x in self._elements]))
+        return f"<KeySetAllExceptSome ({keys})>"
 
     def __repr__(self) -> str:
         """Returns repr()."""
-        keys = ','.join([f'\'{x}\'' for x in self._elements])
-        return f'KeySetAllExceptSome([{keys}])'
+        keys = ",".join([f"'{x}'" for x in self._elements])
+        return f"KeySetAllExceptSome([{keys}])"
 
     def key_set_type(self) -> KeySetType:
         """Returns the KeySetType that describes the set."""

@@ -5,7 +5,6 @@ from key_set.base import KeySetAll, KeySetAllExceptSome, KeySetNone, KeySetSome
 
 
 class TestAll:  # noqa: D101
-
     def test_represents(self) -> None:
         ks = KeySetAll()
         assert ks.represents_all()
@@ -50,26 +49,26 @@ class TestAll:  # noqa: D101
 
     def test_intersect_some(self) -> None:
         ks = KeySetAll()
-        other = KeySetSome({'a', 'b'})
+        other = KeySetSome({"a", "b"})
         actual = ks.intersect(other)
         assert actual.represents_some()
-        assert actual.elements() == {'a', 'b'}
+        assert actual.elements() == {"a", "b"}
         assert actual == other
         assert actual is not other
 
     def test_intersect_all_except_some(self) -> None:
         ks = KeySetAll()
-        other = KeySetAllExceptSome({'a', 'b'})
+        other = KeySetAllExceptSome({"a", "b"})
         actual = ks.intersect(other)
         assert actual.represents_all_except_some()
-        assert actual.elements() == {'a', 'b'}
+        assert actual.elements() == {"a", "b"}
         assert actual == other
         assert actual is not other
 
     def test_includes(self) -> None:
         ks = KeySetAll()
-        assert ks.includes('a')
-        assert 'a' in ks
+        assert ks.includes("a")
+        assert "a" in ks
 
     def test_len(self) -> None:
         ks = KeySetAll()
@@ -89,13 +88,13 @@ class TestAll:  # noqa: D101
 
     def test_union_some(self) -> None:
         ks = KeySetAll()
-        other = KeySetSome({'a', 'b'})
+        other = KeySetSome({"a", "b"})
         actual = ks.union(other)
         assert actual.represents_all()
 
     def test_union_all_except_some(self) -> None:
         ks = KeySetAll()
-        other = KeySetAllExceptSome({'a', 'b'})
+        other = KeySetAllExceptSome({"a", "b"})
         actual = ks.union(other)
         assert actual.represents_all()
 
@@ -113,14 +112,14 @@ class TestAll:  # noqa: D101
 
     def test_remove_some(self) -> None:
         ks = KeySetAll()
-        other = KeySetSome({'a', 'b'})
+        other = KeySetSome({"a", "b"})
         actual = ks.difference(other)
         assert actual.represents_all_except_some()
-        assert actual.elements() == {'a', 'b'}
+        assert actual.elements() == {"a", "b"}
 
     def test_remove_all_except_some(self) -> None:
         ks = KeySetAll()
-        other = KeySetAllExceptSome({'a', 'b'})
+        other = KeySetAllExceptSome({"a", "b"})
         actual = ks.difference(other)
         assert actual.represents_some()
-        assert actual.elements() == {'a', 'b'}
+        assert actual.elements() == {"a", "b"}

@@ -6,7 +6,6 @@ from key_set.base import KeySetAll, KeySetAllExceptSome, KeySetNone, KeySetSome
 
 
 class TestElements:  # noqa: D101
-
     def test_all(self) -> None:
         ks = KeySetAll()
         assert ks.elements() == set()
@@ -16,15 +15,15 @@ class TestElements:  # noqa: D101
         assert ks.elements() == set()
 
     def test_some(self) -> None:
-        ks = KeySetSome({'a', 'b'})
+        ks = KeySetSome({"a", "b"})
         e = ks.elements()
-        assert e == {'a', 'b'}
-        e.add('c')
-        assert ks.elements() == {'a', 'b'}
+        assert e == {"a", "b"}
+        e.add("c")
+        assert ks.elements() == {"a", "b"}
 
     def test_all_except_some(self) -> None:
-        ks = KeySetAllExceptSome({'a', 'b'})
+        ks = KeySetAllExceptSome({"a", "b"})
         e = ks.elements()
-        assert e == {'a', 'b'}
-        e.add('c')
-        assert ks.elements() == {'a', 'b'}
+        assert e == {"a", "b"}
+        e.add("c")
+        assert ks.elements() == {"a", "b"}
