@@ -1,20 +1,33 @@
 name: CI
 
 on:
-    push:
-        branches:
-            - master
-            - feature/*
+  push:
+    branches-ignore:
+      - doc/*
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
 
-        steps:
-            - uses: actions/checkout@v2
-            - uses: actions/setup-python@v1
+    name: Python ${{ matrix.python-version }} on ${{ matrix.os }}
 
-            - name: CI checks
-              run: |
-                  python3 -m pip install pipenv
-                  make
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Display Python version
+        run: python --version
+
+      - name: Put python version in .python-version file
+        run: echo ${{ matrix.python-version }} > .python-version
+
+      - name: CI checks
+        run: |
+          python -m pip install wheel pipenv
+          make
