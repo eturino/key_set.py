@@ -10,8 +10,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04]
-        python-version: ["3.6", "3.7", "3.8", "3.9", "3.10", "3.11"]
+        os: [ubuntu-latest]
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
 
     name: Python ${{ matrix.python-version }} on ${{ matrix.os }}
 
@@ -24,11 +24,10 @@ jobs:
       - name: Display Python version
         run: python --version
 
-      - name: Install pipenv
-        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python3
-
       - name: Put python version in .python-version file
         run: echo ${{ matrix.python-version }} > .python-version
 
       - name: CI checks
-        run: make
+        run: |
+          python -m pip install wheel pipenv
+          make
