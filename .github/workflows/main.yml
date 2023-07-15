@@ -1,20 +1,31 @@
 name: CI
 
 on:
-    push:
-        branches:
-            - master
-            - feature/*
+  push:
+    branches-ignore:
+      - doc/*
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.6", "3.7", "3.8", "3.9", "3.10", "3.11"]
 
-        steps:
-            - uses: actions/checkout@v2
-            - uses: actions/setup-python@v1
+    name: Python ${{ matrix.python-version }} sample
 
-            - name: CI checks
-              run: |
-                  python3 -m pip install pipenv
-                  make
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pipenv"
+
+      - name: Display Python version
+        run: python --version
+
+      - name: Install pipenv
+        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python3
+
+      - name: CI checks
+        run: make

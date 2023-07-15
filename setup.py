@@ -22,7 +22,7 @@ setup(
     author_email="eturino@eturino.com",
     url="https://github.com/eturino/key_set.py",
     # Detailed description
-    description="KeySet with 4 classes to represent concepts of All, None, Some, and AllExceptSome",
+    description="KeySet with 4 classes to represent All, None, Some, and AllExceptSome",
     long_description=long_description,
     long_description_content_type="text/markdown",
     keywords="set key_set",
@@ -36,6 +36,8 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
     ],
     # Package configuration
     packages=find_packages(exclude=("tests",)),
