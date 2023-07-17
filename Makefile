@@ -9,7 +9,7 @@ endif
 
 export LC_ALL = C
 export LANG = C.UTF-8
-PY_FILES := my_module tests
+PY_FILES := key_set tests
 VERSION := $(shell poetry version --short)
 
 # Bundle tasks
@@ -80,13 +80,13 @@ lint:
 
 run-venv:
 	@echo Execute package directly in virtual environment
-	$(POETRY_CMD) run python -m my_module
+	$(POETRY_CMD) run python -m key_set
 
 install-run:
 	@echo Install and run package via CLI using the activated Python env
 	python -m pip install --upgrade .
 	@echo --- Note: The next command might fail before you reload your shell
-	my_module_cli
+	key_set_cli
 
 publish:
 	@echo Release version $(VERSION)
