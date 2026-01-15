@@ -1,38 +1,57 @@
 # Changelog
 
+## 0.5.1
+
+-  Upgrade all dependencies
+-  Fix and simplify uv usage in Makefile
+-  Update vscode setup
+-  Add a CLAUDE.md
+
+[#19](https://github.com/BastiTee/python-boilerplate/pull/19)
+
 ## 0.5.0
 
--   Migrated from poetry to uv
+-   Migrate from poetry to uv
+
+[#18](https://github.com/BastiTee/python-boilerplate/pull/18)
 
 ## 0.4.2
 
--   Upgraded all dependencies
--   Dropped support for Python 3.9
--   Upgraded `pyproject.toml` after deprecation
+-   Upgrade all dependencies
+-   Drop support for Python 3.9
+-   Upgrade `pyproject.toml` after deprecation
+
+[#16](https://github.com/BastiTee/python-boilerplate/pull/16)
 
 ## 0.4.1
 
--   Upgraded all dependencies
+-   Upgrade all dependencies
+
+[#15](https://github.com/BastiTee/python-boilerplate/pull/15)
 
 ## 0.4.0
 
--   Added pyproject.toml metadata fields for better <https://pypi.org/> usability
--   Upgraded all dependencies
+-   Add pyproject.toml metadata fields for better <https://pypi.org/> usability
+-   Upgrade all dependencies
+
+[#14](https://github.com/BastiTee/python-boilerplate/pull/14)
 
 ## 0.3.4
 
--   Upgraded all dependencies
+-   Upgrade all dependencies
 -   Add support and Github actions matrix for Python 3.13
--   Dropped support for Python 3.8
+-   Drop support for Python 3.8
+
+[#13](https://github.com/BastiTee/python-boilerplate/pull/13)
 
 ## 0.3.3
 
--   Upgraded all dependencies
+-   Upgrade all dependencies
 -   Add support and Github actions matrix for Python 3.12
 
 ## 0.3.2
 
--   Upgraded all dependencies
+-   Upgrade all dependencies
 
 ## 0.3.1
 
@@ -40,52 +59,52 @@
 
 ## 0.3.0
 
--   Removed support for Python 3.7
--   Upgraded all dependencies
--   Added a make target to list outdated dependencies
+-   Remove support for Python 3.7
+-   Upgrade all dependencies
+-   Add a make target to list outdated dependencies
 
 [#11](https://github.com/BastiTee/python-boilerplate/pull/11)
 
 ## 0.2.0
 
--   Added a script installer for fast CLI access
--   Improved readability and infos in README
+-   Add a script installer for fast CLI access
+-   Improve readability and infos in README
 
 [#10](https://github.com/BastiTee/python-boilerplate/pull/10)
 
 ## 0.1.0
 
--   Removed all explicit calls for Python 3 and assuming it everywhere (including project name) [#8](https://github.com/BastiTee/python-boilerplate/pull/8)
--   Added a changelog [#9](https://github.com/BastiTee/python-boilerplate/pull/9)
+-   Remove all explicit calls for Python 3 and assuming it everywhere (including project name) [#8](https://github.com/BastiTee/python-boilerplate/pull/8)
+-   Add a changelog [#9](https://github.com/BastiTee/python-boilerplate/pull/9)
 
 ## 0.0.9
 
--   Added support for Python 3.9-3.11
--   Updated dependencies
+-   Add support for Python 3.9-3.11
+-   Update dependencies
 
 [#6](https://github.com/BastiTee/python-boilerplate/pull/6) [#7](https://github.com/BastiTee/python-boilerplate/pull/7)
 
 ## 0.0.8
 
--   Removed a lot of remaining boilerplate
--   Reduced dependencies
--   Improved Makefile
+-   Remove a lot of remaining boilerplate
+-   Reduce dependencies
+-   Improve Makefile
 -   Improve rename script
 
 [#5](https://github.com/BastiTee/python-boilerplate/pull/5)
 
 ## 0.0.7
 
--   Introduced black code formatting
--   Cleaned up README.md
+-   Introduce black code formatting
+-   Clean up README.md
 
 [#4](https://github.com/BastiTee/python-boilerplate/pull/4)
 
 ## 0.0.6
 
--   Migrated from pipenv to poetry
--   Introduced matrix testing via Github actions
--   Updated configuration files
+-   Migrate from pipenv to poetry
+-   Introduce matrix testing via Github actions
+-   Update configuration files
 
 [#3](https://github.com/BastiTee/python-boilerplate/pull/3)
 
@@ -123,7 +142,8 @@ First release. Contains support for:
 ## How to release a new version
 
 -   Implement all desired changes on branch
--   Update this changelog, bump version number in `pyproject.toml`
+-   Update this changelog
+-   Bump version number in `pyproject.toml`
 -   Finish development on branch and merge to main
 -   Run
 

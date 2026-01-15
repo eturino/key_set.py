@@ -4,7 +4,7 @@ build-backend = "uv_build"
 
 [project]
 name = "my_module"
-version = "0.5.0"
+version = "0.5.1"
 description = "A best-practices template project for Python modules"
 license = "Apache-2.0"
 readme = "README.md"
@@ -29,7 +29,8 @@ classifiers = [
     "Programming Language :: Python :: 3.13"
 ]
 # Python version: https://www.python.org/downloads/
-requires-python = ">3.9,<3.14"
+requires-python = ">=3.10,<3.14"
+dependencies = []
 
 [project.scripts]
 my_module_cli = 'my_module.__main__:main'
@@ -39,20 +40,20 @@ module-root = ""
 
 [dependency-groups]
 dev = [
-    "autopep8>=2.3.2",
-    "black>=25.9.0",
-    "flake8>=7.3.0",
-    "flake8-blind-except>=0.2.1",
-    "flake8-builtins>=3.0.0",
-    "flake8-docstrings>=1.7.0",
-    "flake8-isort>=6.1.2",
-    "flake8-quotes>=3.4.0",
-    "flake8-use-fstring>=1.4",
-    "isort>=6.0.1",
-    "mypy>=1.18.2",
-    "pep8-naming>=0.15.1",
-    "pytest>=8.4.2",
-    "typing-extensions>=4.15.0",
+    "autopep8>=2",
+    "black>=25",
+    "flake8>=7",
+    "flake8-blind-except>=0",
+    "flake8-builtins>=3",
+    "flake8-docstrings>=1",
+    "flake8-isort>=6",
+    "flake8-quotes>=3",
+    "flake8-use-fstring>=1",
+    "isort>=7",
+    "mypy>=1",
+    "pep8-naming>=0",
+    "pytest>=9",
+    "typing-extensions>=4",
 ]
 
 [tool.mypy]
@@ -72,7 +73,10 @@ warn_unreachable = true
 # pretty = true
 
 [tool.pytest]
-addopts = "-p no:warnings"
+addopts = [
+  "-p",
+  "no:warnings"
+]
 
 [tool.black]
 skip-string-normalization = true

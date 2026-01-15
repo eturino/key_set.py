@@ -2,8 +2,7 @@
 ifeq (, $(shell which python))
  $(error "No python on PATH.")
 endif
-UV_CMD := python -m uv
-ifeq (, $(shell $(UV_CMD) help))
+ifeq (, $(shell uv help))
  $(error "uv not available in Python installation.")
 endif
 
@@ -34,51 +33,55 @@ clean:
 
 clear-cache:
 	@echo Clear dependency cache
-	$(UV_CMD) cache clean
+	uv cache clean
 
 venv: clean
 	@echo Initialize virtualenv, i.e., install required packages etc.
-	$(UV_CMD) sync
+	uv sync
 
 # Building software
 
 build: test mypy isort black lint
 	@echo Run build process to package application
-	$(UV_CMD) build
+	uv build
 
 test:
 	@echo Run all tests suites
-	$(UV_CMD) run py.test tests
+	uv run py.test tests
 
 mypy:
 	@echo Run static code checks against source code base
-	$(UV_CMD) run mypy $(PY_FILES)
+	uv run mypy $(PY_FILES)
 
 isort:
 	@echo Check for incorrectly sorted imports
-	$(UV_CMD) run isort --check-only $(PY_FILES)
+	uv run isort --check-only $(PY_FILES)
 
 isort-apply:
 	@echo Check and correct incorrectly sorted imports
-	$(UV_CMD) run isort $(PY_FILES)
+	uv run isort $(PY_FILES)
 
 black:
 	@echo Run code formatting using black
-	$(UV_CMD) run black $(PY_FILES)
+	uv run black $(PY_FILES)
 
 lint:
 	@echo Run code formatting checks against source code base
-	$(UV_CMD) run flake8 $(PY_FILES)
+	uv run flake8 $(PY_FILES)
 
 outdated:
 	@echo Show outdated dependencies
-	$(UV_CMD) pip list --outdated
+	uv pip list --outdated --exclude-editable
+
+update:
+	@echo Update outdated dependencies
+	uv sync --upgrade
 
 # Executing
 
 run-venv:
 	@echo Execute package directly in virtual environment
-	$(UV_CMD) run python -m my_module
+	uv run python -m my_module
 
 install-run:
 	@echo Install and run package via CLI using the activated Python env
