@@ -38,10 +38,6 @@
 - <https://www.kennethreitz.org/essays/why-you-should-use-vs-code-if-youre-a-python-developer>
 - <https://code.visualstudio.com/docs/python/python-tutorial>
 
-## Future ideas and todos
-
-- Use cookiecutter instead of [shell script](./rename_template.sh) (it does work fine at the moment though)
-
 ## Licensing
 
 This project is licensed under [Apache License 2.0](LICENSE.txt).
