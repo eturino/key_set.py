@@ -1,6 +1,24 @@
 # -*- coding: utf-8 -*-
-"""Module init-file.
+"""my_module - A Python module template.
 
-The __init__.py files are required to make Python treat directories
-containing the file as packages.
+This module provides example functions demonstrating proper typing,
+documentation, and testing patterns.
 """
+
+__all__ = ['greet']
+
+
+def greet(name: str) -> str:
+    """Return a greeting message for the given name.
+
+    Args:
+        name: The name of the person to greet.
+
+    Returns:
+        A personalized greeting string.
+
+    Example:
+        >>> greet("World")
+        'Hello, World!'
+    """
+    return f'Hello, {name}!'
