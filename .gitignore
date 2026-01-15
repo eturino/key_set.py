@@ -33,3 +33,6 @@ venv.bak/
 
 # Ruff linter
 .ruff_cache/
+
+# AI tooling
+.claude/
