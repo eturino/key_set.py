@@ -16,11 +16,10 @@
 - Basic project/module organization according to <https://packaging.python.org>
 - Makefile bootstrapping script
 - [uv](https://github.com/astral-sh/uv) with virtual environments and project builds
-- [black](https://github.com/psf/black) code formatting
+- [Ruff](https://github.com/astral-sh/ruff) for linting and code formatting (replaces black, flake8, isort)
 - Unit testing with [pytest](https://docs.pytest.org/en/latest/)
-- Linting ([flake8](http://flake8.pycqa.org)) and code formatting ([autopep8](https://github.com/hhatto/autopep8)) support
-- [isort](https://pypi.org/project/isort/) support for automated import sorting
-- [mpyp](https://pypi.org/project/mypy/) support for type checking
+- [mypy](https://pypi.org/project/mypy/) for static type checking
+- PEP 561 compliant (`py.typed` marker included)
 - Publishing to PyPi.org
 - [vscode](https://code.visualstudio.com/) editor configuration including plugin recommendations, debugging support, unit test discovery and on-save formatting
 - [Github actions](https://github.com/BastiTee/python-boilerplate/actions) continuous integration with multi-python testing
@@ -39,7 +38,6 @@
 
 ## Future ideas and todos
 
-- Embed flake8 config into `pyproject.toml` once they support it ([see](https://github.com/PyCQA/flake8/issues/234))
 - Use cookiecutter instead of [shell script](./rename_template.sh) (it does work fine at the moment though)
 
 ## Licensing
