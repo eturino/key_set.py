@@ -43,6 +43,13 @@ make install-run    # Install package and run via CLI as my_module_cli
 make clean          # Remove all generated files (.venv, caches, build artifacts)
 make venv           # Clean and recreate virtual environment with uv sync
 make clear-cache    # Clear uv dependency cache
+make outdated       # Show outdated dependencies
+make update         # Update outdated dependencies
+```
+
+### Template Setup
+```bash
+./rename_template.sh    # Rename the template project (interactive script)
 ```
 
 ## Architecture
