@@ -2,6 +2,8 @@
 
 > A best-practices template project for Python modules
 
+This boilerplate gives you a production-ready Python project structure with modern tooling. Clone it, rename it, and start coding - linting, formatting, type checking, testing, and CI are already configured. No more setting up the same tools for every new project.
+
 ## Setup
 
 - Create a new repository [using this template](https://github.com/BastiTee/python-boilerplate/generate).
