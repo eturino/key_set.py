@@ -40,19 +40,9 @@ module-root = ""
 
 [dependency-groups]
 dev = [
-    "autopep8>=2",
-    "black>=25",
-    "flake8>=7",
-    "flake8-blind-except>=0",
-    "flake8-builtins>=3",
-    "flake8-docstrings>=1",
-    "flake8-isort>=6",
-    "flake8-quotes>=3",
-    "flake8-use-fstring>=1",
-    "isort>=7",
     "mypy>=1",
-    "pep8-naming>=0",
     "pytest>=9",
+    "ruff>=0.8",
     "typing-extensions>=4",
 ]
 
@@ -78,5 +68,23 @@ addopts = [
   "no:warnings"
 ]
 
-[tool.black]
-skip-string-normalization = true
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "N",    # pep8-naming
+    "BLE",  # flake8-blind-except
+    "A",    # flake8-builtins
+]
+ignore = [
+    "E203",  # whitespace before colon (Black-compatible)
+]
+
+[tool.ruff.format]
+quote-style = "preserve"

@@ -24,6 +24,7 @@ clean:
 	-name ".tox" -o \
 	-name ".ropeproject" -o \
 	-name ".mypy_cache" -o \
+	-name ".ruff_cache" -o \
 	-name ".pytest_cache" -o \
 	-name "__pycache__" -o \
 	-iname "*.egg-info" -o \
@@ -41,7 +42,7 @@ venv: clean
 
 # Building software
 
-build: test mypy isort black lint
+build: test mypy lint format
 	@echo Run build process to package application
 	uv build
 
@@ -53,21 +54,21 @@ mypy:
 	@echo Run static code checks against source code base
 	uv run mypy $(PY_FILES)
 
-isort:
-	@echo Check for incorrectly sorted imports
-	uv run isort --check-only $(PY_FILES)
-
-isort-apply:
-	@echo Check and correct incorrectly sorted imports
-	uv run isort $(PY_FILES)
-
-black:
-	@echo Run code formatting using black
-	uv run black $(PY_FILES)
-
 lint:
-	@echo Run code formatting checks against source code base
-	uv run flake8 $(PY_FILES)
+	@echo Run linting checks using ruff
+	uv run ruff check $(PY_FILES)
+
+lint-fix:
+	@echo Fix linting issues using ruff
+	uv run ruff check --fix $(PY_FILES)
+
+format:
+	@echo Run code formatting using ruff
+	uv run ruff format $(PY_FILES)
+
+format-check:
+	@echo Check code formatting using ruff
+	uv run ruff format --check $(PY_FILES)
 
 outdated:
 	@echo Show outdated dependencies

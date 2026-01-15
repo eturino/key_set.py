@@ -24,12 +24,12 @@ uv run py.test tests/test_code.py       # Run a single test file
 
 ### Code Quality
 ```bash
-make build          # Run full build: test, mypy, isort, black, lint, then package
+make build          # Run full build: test, mypy, lint, format, then package
 make mypy           # Type checking with mypy
-make isort          # Check import sorting (read-only)
-make isort-apply    # Fix import sorting
-make black          # Format code with black
-make lint           # Run flake8 linting
+make lint           # Run ruff linting
+make lint-fix       # Fix linting issues with ruff
+make format         # Format code with ruff
+make format-check   # Check code formatting with ruff
 ```
 
 ### Execution
@@ -67,18 +67,17 @@ make update         # Update outdated dependencies
 - Package structure follows packaging.python.org standards
 
 ### Code Quality Configuration
-- **Black**: Line length 88, `skip-string-normalization = true`
-- **Flake8**: Max line length 88 (matches black), ignores Q003, W503, E203
+- **Ruff**: All-in-one linter and formatter (replaces Black, Flake8, isort). Line length 88, quote-style preserve
 - **Mypy**: Strict mode with `disallow_untyped_defs = true`, `check_untyped_defs = true`
-- **isort**: Configured to work with black and flake8
 - Python versions supported: 3.10, 3.11, 3.12, 3.13 (requires-python: ">=3.10,<3.14")
+- Package is PEP 561 compliant (`py.typed` marker included)
 
 ### Testing
 - Uses pytest with `-p no:warnings` to suppress warnings
 - Tests should follow the class-based structure in `tests/test_code.py`
 
 ### VSCode Integration
-- Python formatter: black-formatter (format on save enabled)
+- Python formatter: Ruff (format on save enabled)
 - Pytest discovery enabled
 - Tab size: 4 spaces
 - Word wrap: 88 columns
