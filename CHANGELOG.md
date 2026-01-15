@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.1
+
+-  Upgraded all dependencies
+-  Fixed and simplied uv usage in Makefile
+-  Update vscode setup
+-  Add a CLAUDE.md
+
 ## 0.5.0
 
 -   Migrated from poetry to uv
