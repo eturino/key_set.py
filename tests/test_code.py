@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
-"""Basic test suite.
+"""Test suite for my_module."""
 
-There are some 'noqa: F401' in this file to just test the isort import sorting
-along with the code formatter.
-"""
-
-import __future__  # noqa: F401
-
-import json  # noqa: F401
-from os import path  # noqa: F401
-from re import IGNORECASE, sub  # noqa: F401
-
-import my_module  # noqa: F401
+from my_module import greet
 
 
-class TestCode:  # noqa: D101
-    def test_code(self) -> None:  # noqa: D102
-        assert True
+class TestGreet:
+    """Tests for the greet function."""
+
+    def test_greet_returns_greeting(self) -> None:
+        """Test that greet returns a properly formatted greeting."""
+        result = greet('Alice')
+        assert result == 'Hello, Alice!'
+
+    def test_greet_with_empty_string(self) -> None:
+        """Test that greet handles empty string input."""
+        result = greet('')
+        assert result == 'Hello, !'

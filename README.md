@@ -2,6 +2,8 @@
 
 > A best-practices template project for Python modules
 
+This boilerplate gives you a production-ready Python project structure with modern tooling. Clone it, rename it, and start coding - linting, formatting, type checking, testing, and CI are already configured. No more setting up the same tools for every new project.
+
 ## Setup
 
 - Create a new repository [using this template](https://github.com/BastiTee/python-boilerplate/generate).
@@ -16,14 +18,15 @@
 - Basic project/module organization according to <https://packaging.python.org>
 - Makefile bootstrapping script
 - [uv](https://github.com/astral-sh/uv) with virtual environments and project builds
-- [black](https://github.com/psf/black) code formatting
+- [Ruff](https://github.com/astral-sh/ruff) for linting and code formatting (replaces black, flake8, isort)
+- Security scanning via Ruff's [flake8-bandit](https://docs.astral.sh/ruff/rules/#flake8-bandit-s) rules
 - Unit testing with [pytest](https://docs.pytest.org/en/latest/)
-- Linting ([flake8](http://flake8.pycqa.org)) and code formatting ([autopep8](https://github.com/hhatto/autopep8)) support
-- [isort](https://pypi.org/project/isort/) support for automated import sorting
-- [mpyp](https://pypi.org/project/mypy/) support for type checking
+- [mypy](https://pypi.org/project/mypy/) for static type checking
+- PEP 561 compliant (`py.typed` marker included)
 - Publishing to PyPi.org
 - [vscode](https://code.visualstudio.com/) editor configuration including plugin recommendations, debugging support, unit test discovery and on-save formatting
 - [Github actions](https://github.com/BastiTee/python-boilerplate/actions) continuous integration with multi-python testing
+- [Dependabot](https://docs.github.com/en/code-security/dependabot) for automated dependency updates
 - Executable script so after package installation you can run from the CLI using `my_module_cli`
 
 ## Resources
@@ -36,11 +39,6 @@
 - <https://www.python.org/dev/peps/pep-0008/>
 - <https://www.kennethreitz.org/essays/why-you-should-use-vs-code-if-youre-a-python-developer>
 - <https://code.visualstudio.com/docs/python/python-tutorial>
-
-## Future ideas and todos
-
-- Embed flake8 config into `pyproject.toml` once they support it ([see](https://github.com/PyCQA/flake8/issues/234))
-- Use cookiecutter instead of [shell script](./rename_template.sh) (it does work fine at the moment though)
 
 ## Licensing
 
