@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.6.0
+
+-  Simplify .gitignore
+-  Migrate from black, flake8, and isort to https://github.com/astral-sh/ruff
+-  Improve CI flow
+-  Add dependabot config
+-  Add security scanning
+-  Add help section to Makefile
+
+[#20](https://github.com/BastiTee/python-boilerplate/pull/20)
+
 ## 0.5.1
 
 -  Upgrade all dependencies
