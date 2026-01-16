@@ -1,9 +1,15 @@
 # `key_set`
 
+Lightweight, zero-dependency library implementing 4 KeySet types representing set theory concepts:
+- **All (𝕌)**: Universal set - contains everything
+- **None (∅)**: Empty set
+- **Some**: Finite subset of elements
+- **AllExceptSome**: Complement of a finite set
+
+Operations like `intersect`, `union`, `difference` are algebraically correct. You can also check inclusion with `includes(element)` or use `element in keyset`.
+
 Python port of [KeySet in TypeScript](https://github.com/eturino/ts-key-set)
 and [KeySet in Ruby](https://github.com/eturino/ruby_key_set)
-
-KeySet with 4 classes to represent concepts of All, None, Some, and AllExceptSome, the last 2 with a set of keys, and all with [intersection](#intersectother), [difference](#differenceother), [union](#unionother), [inversion](#invert), and [inclusion](#includeselement) calculations.
 
 
 ## Limitations
@@ -85,3 +91,33 @@ Returns a new KeySet with the difference (A - B) of the Sets: a set that contain
 ### `includes(element)`
 
 Returns True if the set that this KeySet represents contains the given element.
+
+## `len()` support
+
+`KeySetNone`, `KeySetSome`, and `KeySetAllExceptSome` support `len()`:
+
+```python
+len(KeySetNone())  # 0
+len(KeySetSome({'a', 'b'}))  # 2
+len(KeySetAllExceptSome({'a', 'b'}))  # 2 (number of excluded elements)
+```
+
+`KeySetAll` represents an infinite set, so by default `len()` raises `TypeError`:
+
+```python
+len(KeySetAll())  # raises TypeError
+```
+
+### Compatibility mode for `KeySetAll`
+
+If you need `len()` to work on all KeySet types (e.g., for code that expects all objects to support `len()`), you can enable compatibility mode:
+
+```python
+from key_set import KeySetAll
+
+KeySetAll.enable_compat_len(True)
+len(KeySetAll())  # returns sys.maxsize
+
+KeySetAll.enable_compat_len(False)  # restore default behavior
+len(KeySetAll())  # raises TypeError again
+```

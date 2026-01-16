@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/eturino/key_set.py/compare/v1.1.1...v2.0.0) (2026-01-16)
+
+### BREAKING CHANGES
+
+* **Python version**: Now requires Python 3.12+ (previously 3.6+)
+* **KeySetAll.__len__**: Now raises `TypeError` instead of returning 0, since `KeySetAll` represents an infinite set
+
+### Features
+
+* `KeySetAll.enable_compat_len(True)` - opt-in compatibility mode where `len(KeySetAll())` returns `sys.maxsize` instead of raising `TypeError`
+* Use `match` statements with exhaustive type checking via `assert_never`
+* Use `frozenset` internally for better performance and hashability
+* Add `__hash__` to all KeySet classes (now usable as dict keys and in sets)
+* Add `__slots__` for reduced memory footprint
+* Use `Iterable[str]` for more flexible input types
+* Migrate from Makefile to `just` for task running
+
+### Performance
+
+* Internal storage uses `frozenset` instead of `set` - faster operations
+* `__slots__` reduces per-instance memory overhead
+* Direct frozenset operations avoid unnecessary copies in set operations
+
 ### [1.1.1](https://github.com/eturino/key_set.py/compare/v1.1.0...v1.1.1) (2022-02-25)
 
 ## 1.1.0 (2021-08-02)

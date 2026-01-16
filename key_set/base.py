@@ -1,15 +1,19 @@
 from __future__ import annotations
 
+import sys
 from abc import ABC, abstractmethod
-from typing import Any, List, Set, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Iterable, assert_never
 
 from .enum import KeySetType
 
-TKS = TypeVar("TKS", List[str], Set[str])
+if TYPE_CHECKING:
+    from typing import Never
 
 
-class KeySet(ABC):  # Inherit from ABC(Abstract base class)
+class KeySet(ABC):
     """Base class for all KeySets."""
+
+    __slots__ = ()
 
     @abstractmethod
     def key_set_type(self) -> KeySetType:
@@ -23,6 +27,11 @@ class KeySet(ABC):  # Inherit from ABC(Abstract base class)
         It'll return an empty set.
         """
         pass
+
+    @property
+    def _elements_internal(self) -> frozenset[str]:
+        """Internal access to elements without copy. Override in subclasses."""
+        return frozenset()
 
     def represents_all(self) -> bool:
         """Returns true if the set is a ALL KeySet."""
@@ -82,17 +91,41 @@ class KeySet(ABC):  # Inherit from ABC(Abstract base class)
 class KeySetAll(KeySet):
     """Represents the ALL sets: 𝕌 (the entirety of possible keys)."""
 
+    __slots__ = ()
+    _compat_len_mode: bool = False
+
+    @classmethod
+    def enable_compat_len(cls, enabled: bool = True) -> None:
+        """Enable/disable compatibility mode for __len__.
+
+        When enabled, len(KeySetAll()) returns sys.maxsize instead of raising TypeError.
+        This is useful for code that expects all objects to support len().
+
+        Args:
+            enabled: True to return sys.maxsize, False to raise TypeError (default behavior)
+        """
+        cls._compat_len_mode = enabled
+
     def __eq__(self, other: Any) -> bool:
         """Returns True if `other` is KeySetAll.."""
         if not isinstance(other, KeySet):
-            # don't attempt to compare against unrelated types
             return NotImplemented
 
         return isinstance(other, KeySetAll)
 
+    def __hash__(self) -> int:
+        """Returns hash."""
+        return hash(KeySetType.ALL)
+
     def __len__(self) -> int:
-        """Returns 0 (since we do not know, but maybe should be infinity)."""
-        return 0
+        """Return length of the set.
+
+        By default, raises TypeError since KeySetAll represents an infinite set.
+        If compat_len_mode is enabled via enable_compat_len(), returns sys.maxsize.
+        """
+        if KeySetAll._compat_len_mode:
+            return sys.maxsize
+        raise TypeError("KeySetAll represents an infinite set and has no len()")
 
     def __str__(self) -> str:
         """Returns str()."""
@@ -136,27 +169,34 @@ class KeySetAll(KeySet):
 
     def difference(self, other: KeySet) -> KeySet:
         """Returns a new KeySet that contains the diff (A - B)."""
-        if other.represents_all():
-            return KeySetNone()
-        if other.represents_none():
-            return self.clone()
-        if other.represents_some():
-            return KeySetAllExceptSome(other.elements())
-        if other.represents_all_except_some():
-            return KeySetSome(other.elements())
-        return NotImplemented
+        match other.key_set_type():
+            case KeySetType.ALL:
+                return KeySetNone()
+            case KeySetType.NONE:
+                return self.clone()
+            case KeySetType.SOME:
+                return KeySetAllExceptSome(other._elements_internal)
+            case KeySetType.ALL_EXCEPT_SOME:
+                return KeySetSome(other._elements_internal)
+            case _ as unreachable:
+                assert_never(unreachable)
 
 
 class KeySetNone(KeySet):
     """Represents the NONE sets: ø (empty set)."""
 
+    __slots__ = ()
+
     def __eq__(self, other: Any) -> bool:
         """Returns True if `other` is KeySetNone..."""
         if not isinstance(other, KeySet):
-            # don't attempt to compare against unrelated types
             return NotImplemented
 
         return isinstance(other, KeySetNone)
+
+    def __hash__(self) -> int:
+        """Returns hash."""
+        return hash(KeySetType.NONE)
 
     def __len__(self) -> int:
         """Returns 0."""
@@ -210,20 +250,25 @@ class KeySetNone(KeySet):
 class KeySetSome(KeySet):
     """Represents the SOME sets: a concrete set (`A ⊂ 𝕌`)."""
 
-    def __init__(self, elements: TKS):
+    __slots__ = ("_elements",)
+
+    def __init__(self, elements: Iterable[str]) -> None:
         """Requires the set of elements of the concrete set."""
-        self._elements = set(elements)
+        self._elements = frozenset(elements)
 
     def __eq__(self, other: Any) -> bool:
         """Returns True if `other` is KeySetSome."""
         if not isinstance(other, KeySet):
-            # don't attempt to compare against unrelated types
             return NotImplemented
 
         if not isinstance(other, KeySetSome):
             return False
 
-        return self._elements == other.elements()
+        return self._elements == other._elements
+
+    def __hash__(self) -> int:
+        """Returns hash."""
+        return hash((KeySetType.SOME, self._elements))
 
     def __len__(self) -> int:
         """Returns the length of the elements in the set."""
@@ -231,12 +276,12 @@ class KeySetSome(KeySet):
 
     def __str__(self) -> str:
         """Returns str()."""
-        keys = ",".join(sorted([x for x in self._elements]))
+        keys = ",".join(sorted(self._elements))
         return f"<KeySetSome ({keys})>"
 
     def __repr__(self) -> str:
         """Returns repr()."""
-        keys = ",".join([f"'{x}'" for x in self._elements])
+        keys = ",".join(f"'{x}'" for x in self._elements)
         return f"KeySetSome([{keys}])"
 
     def key_set_type(self) -> KeySetType:
@@ -247,17 +292,22 @@ class KeySetSome(KeySet):
         """Returns a copy of the set of the elements of the concrete set."""
         return set(self._elements)
 
+    @property
+    def _elements_internal(self) -> frozenset[str]:
+        """Internal access to elements without copy."""
+        return self._elements
+
     def represents_some(self) -> bool:
         """Returns true if the set is a SOME KeySet."""
         return True
 
     def invert(self) -> KeySetAllExceptSome:
         """Returns a new KeySet ALL_EXCEPT_SOME."""
-        return KeySetAllExceptSome(self.elements())
+        return KeySetAllExceptSome(self._elements)
 
     def clone(self) -> KeySetSome:
         """Returns a new KeySet that represents the same Set of this one."""
-        return KeySetSome(self.elements())
+        return KeySetSome(self._elements)
 
     def includes(self, elem: str) -> bool:
         """Returns True if the set represented by this includes the elem."""
@@ -265,45 +315,51 @@ class KeySetSome(KeySet):
 
     def intersect(self, other: KeySet) -> KeySet:
         """Returns a new KeySet that represents the intersection (A ∩ B)."""
-        if other.represents_all():
-            return self.clone()
-        if other.represents_none():
-            return other.clone()
-        if other.represents_some():
-            elems = self._elements.intersection(other.elements())
-            return build_some_or_none(elems)
-        if other.represents_all_except_some():
-            elems = self._elements.difference(other.elements())
-            return build_some_or_none(elems)
-        return NotImplemented
+        match other.key_set_type():
+            case KeySetType.ALL:
+                return self.clone()
+            case KeySetType.NONE:
+                return KeySetNone()
+            case KeySetType.SOME:
+                elems = self._elements & other._elements_internal
+                return build_some_or_none(elems)
+            case KeySetType.ALL_EXCEPT_SOME:
+                elems = self._elements - other._elements_internal
+                return build_some_or_none(elems)
+            case _ as unreachable:
+                assert_never(unreachable)
 
     def union(self, other: KeySet) -> KeySet:
         """Returns a new KeySet that contains the elements of both (A U B)."""
-        if other.represents_all():
-            return other.clone()
-        if other.represents_none():
-            return self.clone()
-        if other.represents_some():
-            elems = self._elements.union(other.elements())
-            return build_some_or_none(elems)
-        if other.represents_all_except_some():
-            elems = other.elements().difference(self._elements)
-            return build_all_except_some_or_all(elems)
-        return NotImplemented
+        match other.key_set_type():
+            case KeySetType.ALL:
+                return KeySetAll()
+            case KeySetType.NONE:
+                return self.clone()
+            case KeySetType.SOME:
+                elems = self._elements | other._elements_internal
+                return build_some_or_none(elems)
+            case KeySetType.ALL_EXCEPT_SOME:
+                elems = other._elements_internal - self._elements
+                return build_all_except_some_or_all(elems)
+            case _ as unreachable:
+                assert_never(unreachable)
 
     def difference(self, other: KeySet) -> KeySet:
         """Returns a new KeySet that contains the diff (A - B)."""
-        if other.represents_all():
-            return KeySetNone()
-        if other.represents_none():
-            return self.clone()
-        if other.represents_some():
-            elems = self._elements.difference(other.elements())
-            return build_some_or_none(elems)
-        if other.represents_all_except_some():
-            elems = self._elements.intersection(other.elements())
-            return build_some_or_none(elems)
-        return NotImplemented
+        match other.key_set_type():
+            case KeySetType.ALL:
+                return KeySetNone()
+            case KeySetType.NONE:
+                return self.clone()
+            case KeySetType.SOME:
+                elems = self._elements - other._elements_internal
+                return build_some_or_none(elems)
+            case KeySetType.ALL_EXCEPT_SOME:
+                elems = self._elements & other._elements_internal
+                return build_some_or_none(elems)
+            case _ as unreachable:
+                assert_never(unreachable)
 
 
 class KeySetAllExceptSome(KeySet):
@@ -312,20 +368,25 @@ class KeySetAllExceptSome(KeySet):
     Includes all the elements except the given ones (`A' = {x ∈ 𝕌 | x ∉ A}`).
     """
 
-    def __init__(self, elements: TKS):
+    __slots__ = ("_elements",)
+
+    def __init__(self, elements: Iterable[str]) -> None:
         """Requires the set of elements of the concrete set."""
-        self._elements = set(elements)
+        self._elements = frozenset(elements)
 
     def __eq__(self, other: Any) -> bool:
         """Returns True if `other` is KeySetAllExceptSome."""
         if not isinstance(other, KeySet):
-            # don't attempt to compare against unrelated types
             return NotImplemented
 
         if not isinstance(other, KeySetAllExceptSome):
             return False
 
-        return self._elements == other.elements()
+        return self._elements == other._elements
+
+    def __hash__(self) -> int:
+        """Returns hash."""
+        return hash((KeySetType.ALL_EXCEPT_SOME, self._elements))
 
     def __len__(self) -> int:
         """Returns the length of the elements in the exclusion."""
@@ -333,12 +394,12 @@ class KeySetAllExceptSome(KeySet):
 
     def __str__(self) -> str:
         """Returns str()."""
-        keys = ",".join(sorted([x for x in self._elements]))
+        keys = ",".join(sorted(self._elements))
         return f"<KeySetAllExceptSome ({keys})>"
 
     def __repr__(self) -> str:
         """Returns repr()."""
-        keys = ",".join([f"'{x}'" for x in self._elements])
+        keys = ",".join(f"'{x}'" for x in self._elements)
         return f"KeySetAllExceptSome([{keys}])"
 
     def key_set_type(self) -> KeySetType:
@@ -349,17 +410,22 @@ class KeySetAllExceptSome(KeySet):
         """Returns a copy of the set of the elements of the concrete set."""
         return set(self._elements)
 
+    @property
+    def _elements_internal(self) -> frozenset[str]:
+        """Internal access to elements without copy."""
+        return self._elements
+
     def represents_all_except_some(self) -> bool:
         """Returns true if the set is a ALL_EXCEPT_SOME KeySet."""
         return True
 
     def invert(self) -> KeySetSome:
         """Returns a new KeySet SOME."""
-        return KeySetSome(self.elements())
+        return KeySetSome(self._elements)
 
     def clone(self) -> KeySetAllExceptSome:
         """Returns a new KeySet that represents the same Set of this one."""
-        return KeySetAllExceptSome(self.elements())
+        return KeySetAllExceptSome(self._elements)
 
     def includes(self, elem: str) -> bool:
         """Returns True if the set represented by this includes the elem."""
@@ -367,50 +433,51 @@ class KeySetAllExceptSome(KeySet):
 
     def intersect(self, other: KeySet) -> KeySet:
         """Returns a new KeySet that represents the intersection (A ∩ B)."""
-        if other.represents_all():
-            return self.clone()
-        if other.represents_none():
-            return other.clone()
-        if other.represents_some():
-            elems = other.elements().difference(self._elements)
-            return build_some_or_none(elems)
-        if other.represents_all_except_some():
-            elems = self._elements.union(other.elements())
-            return build_all_except_some_or_all(elems)
-        return NotImplemented
+        match other.key_set_type():
+            case KeySetType.ALL:
+                return self.clone()
+            case KeySetType.NONE:
+                return KeySetNone()
+            case KeySetType.SOME:
+                elems = other._elements_internal - self._elements
+                return build_some_or_none(elems)
+            case KeySetType.ALL_EXCEPT_SOME:
+                elems = self._elements | other._elements_internal
+                return build_all_except_some_or_all(elems)
+            case _ as unreachable:
+                assert_never(unreachable)
 
     def union(self, other: KeySet) -> KeySet:
         """Returns a new KeySet that contains the elements of both (A U B)."""
-        if other.represents_all():
-            return other.clone()
-        if other.represents_none():
-            return self.clone()
-        if other.represents_some():
-            elems = self._elements.difference(other.elements())
-            return build_all_except_some_or_all(elems)
-        if other.represents_all_except_some():
-            elems = other.elements().intersection(self._elements)
-            return build_all_except_some_or_all(elems)
-        return NotImplemented
+        match other.key_set_type():
+            case KeySetType.ALL:
+                return KeySetAll()
+            case KeySetType.NONE:
+                return self.clone()
+            case KeySetType.SOME:
+                elems = self._elements - other._elements_internal
+                return build_all_except_some_or_all(elems)
+            case KeySetType.ALL_EXCEPT_SOME:
+                elems = other._elements_internal & self._elements
+                return build_all_except_some_or_all(elems)
+            case _ as unreachable:
+                assert_never(unreachable)
 
     def difference(self, other: KeySet) -> KeySet:
         """Returns a new KeySet that contains the diff (A - B)."""
-        if other.represents_all():
-            return KeySetNone()
-        if other.represents_none():
-            return self.clone()
-        if other.represents_some():
-            elems = self._elements.union(other.elements())
-            return build_all_except_some_or_all(elems)
-        if other.represents_all_except_some():
-            other_elems = other.elements()
-            surviving = [e for e in other_elems if e not in self._elements]
-            return build_some_or_none(surviving)
-        return NotImplemented
-
-
-TS = Union[KeySetSome, KeySetNone]
-TAES = Union[KeySetAllExceptSome, KeySetAll]
+        match other.key_set_type():
+            case KeySetType.ALL:
+                return KeySetNone()
+            case KeySetType.NONE:
+                return self.clone()
+            case KeySetType.SOME:
+                elems = self._elements | other._elements_internal
+                return build_all_except_some_or_all(elems)
+            case KeySetType.ALL_EXCEPT_SOME:
+                elems = other._elements_internal - self._elements
+                return build_some_or_none(elems)
+            case _ as unreachable:
+                assert_never(unreachable)
 
 
 def build_all() -> KeySetAll:
@@ -423,17 +490,17 @@ def build_none() -> KeySetNone:
     return KeySetNone()
 
 
-def build_some_or_none(seq: TKS) -> TS:
+def build_some_or_none(seq: Iterable[str]) -> KeySetSome | KeySetNone:
     """Returns NONE if seq is blank, or SOME otherwise."""
-    if len(seq) > 0:
-        return KeySetSome(seq)
-    else:
-        return KeySetNone()
+    elements = frozenset(seq)
+    if elements:
+        return KeySetSome(elements)
+    return KeySetNone()
 
 
-def build_all_except_some_or_all(seq: TKS) -> TAES:
+def build_all_except_some_or_all(seq: Iterable[str]) -> KeySetAllExceptSome | KeySetAll:
     """Returns ALL if seq is blank, or ALL_EXCEPT_SOME otherwise."""
-    if len(seq) > 0:
-        return KeySetAllExceptSome(seq)
-    else:
-        return KeySetAll()
+    elements = frozenset(seq)
+    if elements:
+        return KeySetAllExceptSome(elements)
+    return KeySetAll()

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import __future__  # noqa: F401
 
+import pytest
+
 from key_set.base import KeySetAll, KeySetAllExceptSome, KeySetNone, KeySetSome
 
 
@@ -72,7 +74,24 @@ class TestAll:  # noqa: D101
 
     def test_len(self) -> None:
         ks = KeySetAll()
-        assert len(ks) == 0
+        with pytest.raises(TypeError, match="infinite set"):
+            len(ks)
+
+    def test_len_compat_mode(self) -> None:
+        import sys
+
+        ks = KeySetAll()
+        # Enable compat mode
+        KeySetAll.enable_compat_len(True)
+        try:
+            assert len(ks) == sys.maxsize
+        finally:
+            # Restore default behavior
+            KeySetAll.enable_compat_len(False)
+
+        # Verify it's back to raising
+        with pytest.raises(TypeError, match="infinite set"):
+            len(ks)
 
     def test_union_all(self) -> None:
         ks = KeySetAll()

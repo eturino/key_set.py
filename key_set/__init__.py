@@ -28,4 +28,5 @@ __all__ = [
     "KeySetAllExceptSome",
     "KeySetNone",
     "KeySetSome",
+    "KeySetType",
 ]

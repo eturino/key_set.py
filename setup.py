@@ -16,7 +16,7 @@ setup(
     zip_safe=False,
     # Basic project information
     name="key_set",
-    version="1.1.1",
+    version="2.0.0",
     # Authorship and online reference
     author="Eduardo Turiño",
     author_email="eturino@eturino.com",
@@ -32,16 +32,14 @@ setup(
         "Natural Language :: English",
         "License :: OSI Approved :: Apache Software License",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
     ],
     # Package configuration
     packages=find_packages(exclude=("tests",)),
     include_package_data=True,
     package_data={"key_set": ["py.typed"]},
-    python_requires=">= 3.6",
+    python_requires=">= 3.12",
     install_requires=[],
     # Licensing and copyright
     license="Apache 2.0",
