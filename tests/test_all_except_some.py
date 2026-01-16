@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import __future__  # noqa: F401
 
 from key_set.base import KeySetAll, KeySetAllExceptSome, KeySetNone, KeySetSome

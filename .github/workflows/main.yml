@@ -1,20 +1,68 @@
 name: CI
 
 on:
-    push:
-        branches:
-            - master
-            - feature/*
+  push:
+    branches: [master, feature/*]
+    tags: ["v*"]
+  pull_request:
+    branches: [master]
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
-        steps:
-            - uses: actions/checkout@v2
-            - uses: actions/setup-python@v1
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
 
-            - name: CI checks
-              run: |
-                  python3 -m pip install pipenv
-                  make
+      - name: Install Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: uv sync --frozen --all-extras
+
+      - name: Run tests with coverage
+        run: uv run pytest tests -v --cov=key_set --cov-branch --cov-report=xml
+
+      - name: Type check
+        run: uv run mypy key_set
+
+      - name: Lint
+        run: uv run ruff check key_set tests
+
+      - name: Format check
+        run: uv run black key_set tests --check
+
+      - name: Upload coverage to Codecov
+        if: matrix.python-version == '3.12'
+        uses: codecov/codecov-action@v5
+        with:
+          files: coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+
+  publish:
+    needs: test
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Build package
+        run: uv build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
