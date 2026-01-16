@@ -53,6 +53,18 @@ bump part:
     uv run bump-my-version bump {{part}}
     git push && git push --tags
 
+# Create GitHub release from latest tag (usage: just release)
+release:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    version=$(grep '^version = ' pyproject.toml | head -1 | cut -d'"' -f2)
+    tag="v${version}"
+    if ! git tag | grep -q "^${tag}$"; then
+        echo "Error: Tag ${tag} does not exist. Run 'just bump' first."
+        exit 1
+    fi
+    gh release create "${tag}" --generate-notes --title "${tag}"
+
 # Clean
 clean:
     rm -rf .venv .mypy_cache .pytest_cache .ruff_cache __pycache__ build dist *.egg-info
