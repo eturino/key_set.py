@@ -1,73 +1,64 @@
 # key_set justfile
 
-# Default recipe
 default: test mypy lint
 
-# Python files to check
 py_files := "key_set tests"
 
-# Create virtual environment and install dependencies
-venv:
-    rm -rf .venv
-    uv venv --python 3.12
-    uv pip install -e ".[dev]" || uv pip install pytest mypy black isort flake8 -e .
+# Sync dev environment (uses uv.lock)
+sync:
+    uv sync --all-extras
+
+# Update lock file and sync
+update:
+    uv lock --upgrade
+    uv sync --all-extras
 
 # Run tests
 test:
-    pytest tests -v
+    uv run pytest tests -v
 
 # Run tests with coverage
 test-cov:
-    pytest tests -v --cov=key_set --cov-report=term-missing
+    uv run pytest tests -v --cov=key_set --cov-report=term-missing
 
-# Run mypy type checker
+# Type checking
 mypy:
-    mypy key_set
+    uv run mypy key_set
 
-# Run black formatter (check only)
-black:
-    black {{py_files}} --check
+# Lint (ruff replaces flake8 + isort)
+lint:
+    uv run ruff check {{py_files}}
 
-# Run black formatter (apply)
-black-apply:
-    black {{py_files}}
+# Format check
+format-check:
+    uv run black {{py_files}} --check
 
-# Run isort (check only)
-isort:
-    isort --profile black --check-only {{py_files}}
+# Apply all fixes
+fix:
+    uv run ruff check {{py_files}} --fix
+    uv run black {{py_files}}
 
-# Run isort (apply)
-isort-apply:
-    isort --profile black {{py_files}}
+# Prepare for PR (clean slate, fix issues, full check)
+pr: clean sync fix check
 
-# Run all linting checks
-lint: isort black
-    flake8 key_set tests
+# Full check
+check: test mypy lint format-check
 
-# Apply all formatting fixes
-format: isort-apply black-apply
+# Build
+build:
+    uv build
 
-# Full check (test + type check + lint)
-check: test mypy lint
+# Bump version (usage: just bump patch|minor|major)
+bump part:
+    uv run bump-my-version bump {{part}}
+    git push && git push --tags
 
-# Build wheel
-build: check
-    python -m build
-
-# Clean build artifacts
+# Clean
 clean:
-    rm -rf .venv .tox .mypy_cache .pytest_cache __pycache__ build dist *.egg-info
+    rm -rf .venv .mypy_cache .pytest_cache .ruff_cache __pycache__ build dist *.egg-info
     find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
     find . -type d -name "*.egg-info" -exec rm -rf {} + 2>/dev/null || true
 
-# Publish to PyPI
-publish: build
-    twine upload dist/*
-
-# Show outdated packages
+# Show outdated
 outdated:
     uv pip list --outdated
-
-# Run the module
-run:
-    python -m key_set

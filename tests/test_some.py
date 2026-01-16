@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import __future__  # noqa: F401
 
 import key_set  # noqa: F401

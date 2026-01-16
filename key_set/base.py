@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import sys
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Iterable, assert_never
+from collections.abc import Iterable
+from typing import TYPE_CHECKING, Any, assert_never
 
 from .enum import KeySetType
 
 if TYPE_CHECKING:
-    from typing import Never
+    pass
 
 
 class KeySet(ABC):
@@ -102,7 +103,7 @@ class KeySetAll(KeySet):
         This is useful for code that expects all objects to support len().
 
         Args:
-            enabled: True to return sys.maxsize, False to raise TypeError (default behavior)
+            enabled: True for sys.maxsize, False for TypeError (default)
         """
         cls._compat_len_mode = enabled
 

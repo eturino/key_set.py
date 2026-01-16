@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
 import __future__  # noqa: F401
-
-from typing import List
 
 from key_set import (
     build_all,
@@ -21,7 +18,7 @@ class TestBuilds:  # noqa: D101
         assert actual.represents_none()
 
     def test_build_some_with_blank(self) -> None:
-        keys: List[str] = []
+        keys: list[str] = []
         actual = build_some_or_none(keys)
         assert actual.represents_none()
 
@@ -31,7 +28,7 @@ class TestBuilds:  # noqa: D101
         assert actual.elements() == {"A"}
 
     def test_build_all_except_some_with_blank(self) -> None:
-        keys: List[str] = []
+        keys: list[str] = []
         actual = build_all_except_some_or_all(keys)
         assert actual.represents_all()
 
