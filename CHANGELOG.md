@@ -25,6 +25,16 @@ All notable changes to this project will be documented in this file. See [standa
 * `__slots__` reduces per-instance memory overhead
 * Direct frozenset operations avoid unnecessary copies in set operations
 
+### Build & Tooling
+
+* Migrate from Pipenv to uv with pyproject.toml
+* Migrate from Makefile to justfile
+* CI tests on Python 3.12, 3.13, 3.14
+* Replace flake8 + plugins with ruff
+* Add Codecov coverage reporting
+* Add trusted publishing to PyPI via OIDC
+* Add mise.toml for local tool versioning
+
 ### [1.1.1](https://github.com/eturino/key_set.py/compare/v1.1.0...v1.1.1) (2022-02-25)
 
 ## 1.1.0 (2021-08-02)

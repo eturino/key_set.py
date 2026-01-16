@@ -76,6 +76,10 @@ omit = ["key_set/__main__.py"]
 exclude_lines = [
     "pragma: no cover",
     "if TYPE_CHECKING:",
+    "@abstractmethod",
+    "raise NotImplementedError",
+    "assert_never",
+    "case _ as unreachable:",
 ]
 
 [tool.bumpversion]

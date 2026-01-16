@@ -32,7 +32,7 @@ class KeySet(ABC):
     @property
     def _elements_internal(self) -> frozenset[str]:
         """Internal access to elements without copy. Override in subclasses."""
-        return frozenset()
+        return frozenset()  # pragma: no cover
 
     def represents_all(self) -> bool:
         """Returns true if the set is a ALL KeySet."""

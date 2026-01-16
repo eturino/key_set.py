@@ -1,5 +1,19 @@
 # `key_set`
 
+[![CI](https://github.com/eturino/key_set.py/actions/workflows/main.yml/badge.svg)](https://github.com/eturino/key_set.py/actions/workflows/main.yml)
+[![codecov](https://codecov.io/gh/eturino/key_set.py/branch/master/graph/badge.svg)](https://codecov.io/gh/eturino/key_set.py)
+[![PyPI version](https://badge.fury.io/py/key-set.svg)](https://pypi.org/project/key-set/)
+
+**Requires Python 3.12+**
+
+## Installation
+
+```bash
+pip install key-set
+```
+
+## Overview
+
 Lightweight, zero-dependency library implementing 4 KeySet types representing set theory concepts:
 - **All (𝕌)**: Universal set - contains everything
 - **None (∅)**: Empty set
@@ -82,7 +96,7 @@ Returns a new KeySet with the intersection (A ∩ B) of both Sets: a set that co
 
 ### `union(other)`
 
-Returns a new KeySet with the union (A ∩ B) of both Sets: a set that contains the elements in any of the sets.
+Returns a new KeySet with the union (A ∪ B) of both Sets: a set that contains the elements in any of the sets.
 
 ### `difference(other)`
 
@@ -91,6 +105,25 @@ Returns a new KeySet with the difference (A - B) of the Sets: a set that contain
 ### `includes(element)`
 
 Returns True if the set that this KeySet represents contains the given element.
+
+### `clone()`
+
+Returns a new KeySet with the same elements.
+
+## Hashability
+
+All KeySet classes are hashable and can be used as dictionary keys or in sets:
+
+```python
+from key_set import KeySetSome, KeySetAll
+
+cache = {
+    KeySetAll(): "all data",
+    KeySetSome({'a', 'b'}): "partial data",
+}
+
+unique_keysets = {KeySetSome({'a'}), KeySetSome({'a'})}  # contains 1 element
+```
 
 ## `len()` support
 
