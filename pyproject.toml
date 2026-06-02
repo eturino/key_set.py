@@ -96,3 +96,7 @@ replace = 'version = "{new_version}"'
 
 [tool.hatch.build.targets.wheel]
 packages = ["key_set"]
+
+[tool.uv]
+# Supply-chain hardening: refuse versions published < 5 days ago.
+exclude-newer = "5 days"
